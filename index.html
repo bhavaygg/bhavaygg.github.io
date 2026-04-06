@@ -1,15 +1,324 @@
 <!DOCTYPE html>
-<html>
-  <head>
-        <link href="styles.css" rel="stylesheet" type="text/css">
-        <link rel="shortcut icon" href="b.png" type="image/x-icon"
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bhavay Aggarwal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-9">
+        <div class="p-2 p-md-4">
 
-    <meta charset="utf-8">
-    <title>Awesome Website</title>
-  </head>
-  <body>
-    
-    <h1>Hello</h1>
-    <a href=transformation.html>Cuisine Transformation</a>
-  </body>
+          <!-- Header -->
+          <div class="site-header">
+            <div>
+              <h1>Bhavay Aggarwal</h1>
+              <hr class="name-divider">
+              <div id="icon-list">
+                <a href="https://github.com/bhavaygg" class="me-2 mb-2 d-inline-block">
+                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-brands fa-github me-1"></i>GitHub</button>
+                </a>
+                <a href="https://www.linkedin.com/in/bhavay-aggarwal/" class="me-2 mb-2 d-inline-block">
+                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-brands fa-linkedin me-1"></i>LinkedIn</button>
+                </a>
+                <a href="#" class="me-2 mb-2 d-inline-block">
+                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-graduation-cap me-1"></i>Google Scholar</button>
+                </a>
+                <a href="mailto:baggarwal9@gatech.edu" class="me-2 mb-2 d-inline-block">
+                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-envelope me-1"></i>Email</button>
+                </a>
+              </div>
+            </div>
+
+            <!-- Tabs top-right -->
+            <ul class="nav nav-tabs site-nav-tabs" id="mainTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">Home</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab">Publications &amp; Projects</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab">Resume</button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content">
+
+            <!-- About Tab -->
+            <div class="tab-pane fade show active" id="about" role="tabpanel">
+
+              <div id="about-me" class="section">
+                <h3 class="section-heading">About Me</h3>
+                <p>I currently am a final year Bioinformatics PhD student at Georgia Institute of Technology, working in the <a href="https://sites.google.com/view/sinhalaboratorygatech">Sinha Lab</a>.
+                  My work focuses on developing computational methods for spatial transcriptomics and single-cell omics. I build tools to better understand cellular characterization, 
+                  subcellular transcript localization, and cell-cell communication, among other aspects. I am broadly interested in disentangling stochastic effects from biological signals
+                  to better understand what things change and how.
+                <p>Before Georgia Tech, I completed my B.Tech. in Computer Science and Biosciences at IIITD.</p>
+              </div>
+
+              <hr class="section-divider">
+
+              <div id="research" class="section">
+                <h3 class="section-heading"><strong>What's New</strong></h3>
+
+                <div class="research-feed">
+                  <article class="research-item">
+                    <div class="research-item-top">
+                      <span class="research-tag">Preprint</span>
+                      <span class="research-meta">2026 · bioRxiv</span>
+                    </div>
+                    <p class="research-description">Introducing SCOUBI, a novel method that unlocks insights from the extrasomatic space of spatial transcriptomics data.</p>
+                  </article>
+                  <article class="research-item">
+                    <div class="research-item-top">
+                      <span class="research-tag">Publication</span>
+                      <span class="research-meta">2025 · Communications Biology</span>
+                    </div>
+                    <p class="research-description">Our <a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP paper</a> is now out in <em>Communications Biology</em>, introducing an interpretable framework for identifying transcript localization patterns in subcellular spatial transcriptomics data.</p>
+                  </article>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Publications & Projects Tab -->
+            <div class="tab-pane fade" id="more" role="tabpanel">
+
+              <div class="cv-section">
+                <h2><span>Publications</span></h2>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.64898/2026.01.20.700581v2.abstract">MANTIS: Analytics toolkit for spatial metabolomics with matching spatial transcriptomics data</a></p>
+                  <p class="pub-authors">Yu Hao, Yeojin Kim, <span class="pub-highlight">Bhavay Aggarwal.</span> and Saurabh Sinha.</p>
+                  <p class="pub-journal">bioRxiv · 2026</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.64898/2026.01.07.697982v1.abstract">CELLWHISPER: Inference of Direct Cell-Cell Communication from Spatial Transcriptomics</a></p>
+                  <p class="pub-authors">Anurendra Kumar, Felix Rivera, <span class="pub-highlight">Bhavay Aggarwal.</span>, Nicholas Zhang, Ahmet Coskun, Saurabh Sinha, et al.</p>
+                  <p class="pub-journal">bioRxiv · 2026</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP enables module discovery and visualization for subcellular spatial transcriptomics data</a></p>
+                  <p class="pub-authors"><span class="pub-highlight">Bhavay Aggarwal.</span> and Saurabh Sinha.</p>
+                  <p class="pub-journal">Communications Biology · 2025</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.1101/2025.01.12.632553v1">On-chip 3D potency assay for prediction of clinical outcomes for cell therapy candidates for osteoarthritis</a></p>
+                  <p class="pub-authors">Rebecca S Schneider, Elisa B Nieves, <span class="pub-highlight">Bhavay Aggarwal</span>, Annie C Bowles-Welch, Hazel Y Stevens, Linda E Kippner, Scott D Boden, Kenneth Mautner, Hicham Drissi, Krishnendu Roy, Wilbur A Lam, Saurabh Sinha, Andrés J García.</p>
+                  <p class="pub-journal">Nature Communications · 2025</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.nature.com/articles/s41467-024-49457-w">Intracellular spatial transcriptomic analysis toolkit (InSTAnT)</a></p>
+                  <p class="pub-authors">Anurendra Kumar, Alex W Schrader, <span class="pub-highlight">Bhavay Aggarwal</span>, Ali Ebrahimpour Boroojeny, Marisa Asadian, JuYeon Lee, You Jin Song, Sihai Dave Zhao, Hee-Sun Han, Saurabh Sinha.</p>
+                  <p class="pub-journal">Nature Communications · 2024</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.cell.com/cell-reports/fulltext/S2211-1247(24)00908-2">Investigation of MSC potency metrics via integration of imaging modalities with lipidomic characterization</a></p>
+                  <p class="pub-authors">Priyanka Priyadarshani, Alexandria Van Grouw, Adrian Ross Liversage, Kejie Rui, Arina Nikitina, Kayvan Forouhesh Tehrani, <span class="pub-highlight">Bhavay Aggarwal</span>, Steven L Stice, Saurabh Sinha, Melissa L Kemp, Facundo M Fernández, Luke J Mortensen.</p>
+                  <p class="pub-journal">Cell Reports · 2024</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.1101/2021.11.11.468208v1">AgAnt: A computational tool to assess Agonist/Antagonist mode of interaction</a></p>
+                  <p class="pub-authors"><span class="pub-highlight">Bhavay Aggarwal</span> and Arjun Ray.</p>
+                  <p class="pub-journal">bioRxiv · 2021</p>
+                </div>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://ieeexplore.ieee.org/abstract/document/9094121">Hierarchical clustering of world cuisines</a></p>
+                  <p class="pub-authors">Tript Sharma, Utkarsh Upadhyay, Jushaan Kalra, Sakshi Arora, Saad Ahmad, <span class="pub-highlight">Bhavay Aggarwal</span> and Ganesh Bagler.</p>
+                  <p class="pub-journal">IEEE ICDEW · 2020</p>
+                </div>
+              </div>
+
+              <!-- Projects -->
+              <div class="cv-section">
+                <h2><span>Projects</span></h2>
+
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://github.com/anshumansinha16/EPI_final_Submission">Outbreak analysis of Escherichia coli O157</a></p>
+                  <p class="pub-authors">GT Data Science for Epidemiology Course Project</p>
+                  <p class="pub-journal">Performed spatiotemporal analysis of Google search trends for various disease
+                  symptoms to forecast regional COVID-19 cases using machine learning.</p>
+                </div>
+                <div class="pub-item">
+                  <p class="pub-title">Outbreak analysis of Escherichia coli O157</a></p>
+                  <p class="pub-authors">GT Comparative Genomics Course Project</p>
+                  <p class="pub-journal">Created a bioinformatics web interface combining genome assembly,
+                  functional annotation, and comparative genomics to enable rapid outbreak analysis of E. coli strains.</p>
+                </div>
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://github.com/bhavaygg/Cuisine_Transformation">Cuisine Transformation</a></p>
+                  <p class="pub-authors">IIITD Complex Systems Lab</p>
+                  <p class="pub-journal">Conditional VAE based on the RoBERTa encoder architecture to transform recipes across cuisines</p>
+                </div>
+                <div class="pub-item">
+                  <p class="pub-title"><a href="https://github.com/RayLabIIITD/pyLFDA">pyLFDA</a></p>
+                  <p class="pub-authors">IIITD RayLab</p>
+                  <p class="pub-journal">Developed an open-source Python library for performing pairwise lipid force distribution analysis in molecular
+                  dynamics simulations.</p>
+                </div>
+
+                <div class="fun-work-section">
+                  <div class="fun-work-header">
+                    <h3>Other Fun Work</h3>
+                    <p>Older builds that were scrappy, hands-on, and a lot of fun to make.</p>
+                  </div>
+
+                  <article class="project-feature-card">
+                    <img class="project-feature-image" src="cap-html/view2.jpeg" alt="Pedestrian Navigator Cap prototype being worn">
+                    <div class="project-feature-content">
+                      <p class="pub-title"><a href="cap.html">Pedestrian Navigator Cap</a></p>
+                      <p class="pub-journal">A heads-up navigation cap designed using Raspberry Pi to surface walking directions in the user’s field of view, combining wearable prototyping, route guidance, and interface experimentation.</p>
+                    </div>
+                  </article>
+
+                  <article class="project-feature-card">
+                    <img class="project-feature-image" src="assets/flower_protonopia.jpg" alt="Protanopia example image from the CVD Correction extension project">
+                    <div class="project-feature-content">
+                      <p class="pub-title"><a href="https://github.com/bhavaygg/CVD-Correction-extension">CVD Correction Extension</a></p>
+                      <p class="pub-journal">A ML-based image correction browser extension for color vision deficiency, combining simulation, correction models, and an extension workflow to make on-screen content easier to distinguish.</p>
+                    </div>
+                  </article>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Resume Tab -->
+            <div class="tab-pane fade" id="resume" role="tabpanel">
+
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <span class="text-secondary" style="font-size:0.85rem;">Georgia Institute of Technology · Atlanta, GA · <a href="mailto:baggarwal9@gatech.edu">baggarwal9@gatech.edu</a></span>
+                <a href="assets/resume.pdf" target="_blank" rel="noopener noreferrer" class="resume-download-link"><i class="fa-solid fa-file-pdf me-1"></i>View as PDF</a>
+              </div>
+
+              <div class="resume-summary-card">
+                <!-- <p class="resume-summary-lead">Computational biologist building methods for spatial transcriptomics, single-cell omics, and multimodal biological data.</p> -->
+                <p class="resume-summary-text">
+                  I am a computational biologist focused on developing robust and interpretable methods for analyzing omics data, with the goal 
+                  of generating meaningful biological insights. My work spans deep learning, statistical modeling, and software development for both 
+                  single-cell and multi-omic datasets.
+
+                  My PhD research is specialized in spatial transcriptomics, with a particular emphasis on methods for analyzing single-molecule spatial data. 
+                  I have experience working independently as well as collaborating within interdisciplinary teams, including internships across diverse 
+                  research and applied settings.
+                </p>
+              </div>
+
+              <!-- Education -->
+              <div class="resume-section">
+                <h2 class="resume-heading">Education</h2>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Georgia Institute of Technology</span>
+                    <span class="resume-entry-date">Aug 2022 — Present</span>
+                  </div>
+                  <div class="resume-entry-sub">Ph.D. Bioinformatics (Expected May 2027) · M.S. Bioinformatics, 2023 · GPA 3.91 · Atlanta, GA</div>
+                </div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Indraprastha Institute of Information Technology</span>
+                    <span class="resume-entry-date">Aug 2018 — Jun 2022</span>
+                  </div>
+                  <div class="resume-entry-sub">B.Tech. Computer Science &amp; Biosciences · GPA 7.91/10 · Delhi, India</div>
+                </div>
+              </div>
+
+              <!-- Experience -->
+              <div class="resume-section">
+                <h2 class="resume-heading">Experience</h2>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Georgia Institute of Technology — <a href="https://www.sinhalab.net">Sinha Lab</a></span>
+                    <span class="resume-entry-date">Jan 2023 — Present</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Researcher</strong> · Atlanta, GA</div>
+                  <ul class="resume-bullets">
+                    <li>Developing computational methods for spatial transcriptomics, single-cell omics, and multimodal biological datasets.</li>
+                    <li>Published 7 papers in journals including Nature Communications, Communications Biology, and Cell Reports.</li>
+                  </ul>
+                </div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">GlaxoSmithKline</span>
+                    <span class="resume-entry-date">May 2023 — Aug 2023</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Computational Biology Intern</strong> · Collegeville, PA</div>
+                  <ul class="resume-bullets">
+                    <li>Designed statistical approaches to map genetic perturbations to disease signatures (MegaMap project).</li>
+                    <li>Infered robust gene-disease relationships and validated them with clinical data.</li>
+                  </ul>
+                </div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Indian Institute of Science — <a href="https://at-cg.github.io">ATCG Lab</a></span>
+                    <span class="resume-entry-date">May 2021 — Dec 2021</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Research Intern</strong> · Remote, India</div>
+                  <ul class="resume-bullets">
+                    <li>Implemented novel distance metrics and engineered distributed genomic distance framework with Ray, improving indexing time by 90%.</li>
+                  </ul>
+                </div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Wikilimo</a></span>
+                    <span class="resume-entry-date">February 2021 — April 2021</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Machine Learning Intern</strong> · Remote, India</div>
+                  <ul class="resume-bullets">
+                    <li>Created explainable AI models for wildfire modeling using SMOS-derived products.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Skills -->
+              <div class="resume-section">
+                <h2 class="resume-heading">Skills</h2>
+                <div class="resume-skills-grid">
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/python" class="skill-icon"><span>Python</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/r" class="skill-icon"><span>R</span></div>
+                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" class="skill-icon"><span>PyTorch</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/ray" class="skill-icon"><span>Ray</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/scikitlearn" class="skill-icon"><span>Scikit-Learn</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/huggingface" class="skill-icon"><span>Hugging Face</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/weightsandbiases" class="skill-icon"><span>W&B</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/git" class="skill-icon"><span>Git</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/javascript" class="skill-icon"><span>JavaScript</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/cplusplus" class="skill-icon"><span>C/C++</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/mysql" class="skill-icon"><span>SQL</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/keras" class="skill-icon"><span>Keras</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/react" class="skill-icon"><span>React</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/django" class="skill-icon"><span>Django</span></div>
+                  <div class="skill-item"><img src="https://cdn.simpleicons.org/googlecloud" class="skill-icon"><span>GCP</span></div>
+                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" class="skill-icon"><span>AWS</span></div>
+                </div>
+              </div>
+
+            </div>
+
+          </div><!-- tab-content -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

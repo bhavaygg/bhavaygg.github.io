@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Bungee|Black+Ops+One|VT323|Rock+Salt|Righteous|Monoton|Alfa+Slab+One|Fredoka+One|Architects+Daughter|Anton|Luckiest+Guy|Pacifico|Bangers|Rancho|Bungee+Shade|Fruktur|Gloria+Hallelujah|Josefin+Sans|Permanent+Marker');
+
+body {
+  background-color: black: 
+}
+.Heading{
+  height: 100px;
+/*  background:url('rgb.png');
+background-size: cover;
+*/
+}
+h1{
+  font-family: 'Monoton', cursive;
+  text-align: center;
+  font-size: 50px;
+  color: #ffffff;
+  word-spacing: 10px;
+  text-shadow: -6px 9px 1px #91b4ea;
+
+}
+.Intro{
+  font-family: 'Righteous', cursive;
+  text-align: center;
+  font-size: 40px;
+  color: #ffffff;
+}
+body{
+  background: url('rgb.png');
+  background-size: cover;
+}
+.img1{
+margin-bottom: 0px;
+}
+.img2{
+  margin-top: 15px;
+  height: 500px;
+  width: 500px;
+}
+.img3{
+  margin-top: 15px;
+  height: 500px;
+  width: 500px;
+}
+.desc{
+  font-size: 30px;
+  color: #baffdf;
+  line-height: 30px;
+  font-family: 'Bungee', cursive;
+}
+.img4{
+  margin-left: 20px;
+  margin-top: 15px;
+  height: 700px;
+  width: 700px;
+}
+.img4:hover {
+  height: 90%;
+  width: 90%;
+  z-index: 2;
+}
+.img5{
+  margin-top: 15px;
+  height: 700px;
+  width: 700px;
+}
+.img6{
+  margin-top: 15px;
+  height: 300px;
+  width: 500px;
+}
+.img7{
+  margin-top: 15px;
+  height: 300px;
+  width: 350px;
+}
+.img8{
+  margin-top: 15px;
+  height: 300px;
+  width: 500px;
+}
+.end{
+  margin-top: 50px;
+}
+iframe{
+ margin-top: 50px; 
+}
