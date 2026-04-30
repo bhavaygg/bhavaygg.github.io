@@ -41,13 +41,13 @@
             <!-- Tabs top-right -->
             <ul class="nav nav-tabs site-nav-tabs" id="mainTabs" role="tablist">
               <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">Home</button>
+                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">Home</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab">Publications &amp; Projects</button>
+                <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab" aria-controls="more" aria-selected="false">Publications &amp; Projects</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab">Resume</button>
+                <button class="nav-link" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab" aria-controls="resume" aria-selected="false">Resume</button>
               </li>
             </ul>
           </div>
@@ -62,7 +62,7 @@
                 <p>I currently am a final year Bioinformatics PhD student at Georgia Institute of Technology, working in the <a href="https://sites.google.com/view/sinhalaboratorygatech">Sinha Lab</a>.
                   My work focuses on developing computational methods for spatial transcriptomics and single-cell omics. I build tools to better understand cellular characterization, 
                   subcellular transcript localization, and cell-cell communication, among other aspects. I am broadly interested in disentangling stochastic effects from biological signals
-                  to better understand what things change and how.
+                  to better understand what things change and how.</p>
                 <p>Before Georgia Tech, I completed my B.Tech. in Computer Science and Biosciences at IIITD.</p>
               </div>
 
@@ -85,6 +85,13 @@
                       <span class="research-meta">2025 · Communications Biology</span>
                     </div>
                     <p class="research-description">Our <a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP paper</a> is now out in <em>Communications Biology</em>, introducing an interpretable framework for identifying transcript localization patterns in subcellular spatial transcriptomics data.</p>
+                  </article>
+                  <article class="research-item">
+                    <div class="research-item-top">
+                      <span class="research-tag">Publication</span>
+                      <span class="research-meta">2024 · Nature Communications</span>
+                    </div>
+                    <p class="research-description">The <a href="https://www.nature.com/articles/s41467-024-49457-w">InSTAnT</a> method is now published in <em>Nature Communications</em>, a first of its kind framework to identify transcripts that colocalize with one another in individual cells.</p>
                   </article>
                 </div>
               </div>
@@ -157,7 +164,7 @@
                   symptoms to forecast regional COVID-19 cases using machine learning.</p>
                 </div>
                 <div class="pub-item">
-                  <p class="pub-title">Outbreak analysis of Escherichia coli O157</a></p>
+                  <p class="pub-title">Outbreak analysis of Escherichia coli O157</p>
                   <p class="pub-authors">GT Comparative Genomics Course Project</p>
                   <p class="pub-journal">Created a bioinformatics web interface combining genome assembly,
                   functional annotation, and comparative genomics to enable rapid outbreak analysis of E. coli strains.</p>
@@ -210,104 +217,111 @@
               </div>
 
               <div class="resume-summary-card">
-                <!-- <p class="resume-summary-lead">Computational biologist building methods for spatial transcriptomics, single-cell omics, and multimodal biological data.</p> -->
+                <div class="resume-summary-label">About</div>
                 <p class="resume-summary-text">
                   I am a computational biologist focused on developing robust and interpretable methods for analyzing omics data, with the goal 
                   of generating meaningful biological insights. My work spans deep learning, statistical modeling, and software development for both 
                   single-cell and multi-omic datasets.
-
+                </p>
+                <p class="resume-summary-text">
                   My PhD research is specialized in spatial transcriptomics, with a particular emphasis on methods for analyzing single-molecule spatial data. 
                   I have experience working independently as well as collaborating within interdisciplinary teams, including internships across diverse 
                   research and applied settings.
                 </p>
               </div>
 
-              <!-- Education -->
-              <div class="resume-section">
-                <h2 class="resume-heading">Education</h2>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">Georgia Institute of Technology</span>
-                    <span class="resume-entry-date">Aug 2022 — Present</span>
+              <div class="resume-layout">
+                <div class="resume-sidebar">
+                  <!-- Education -->
+                  <div class="resume-section">
+                    <h2 class="resume-heading">Education</h2>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">Georgia Institute of Technology</span>
+                        <span class="resume-entry-date">Aug 2022 — Present</span>
+                      </div>
+                      <div class="resume-entry-sub">Ph.D. Bioinformatics (Expected May 2027) · M.S. Bioinformatics, 2023 · GPA 3.91 · Atlanta, GA</div>
+                    </div>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">Indraprastha Institute of Information Technology</span>
+                        <span class="resume-entry-date">Aug 2018 — Jun 2022</span>
+                      </div>
+                      <div class="resume-entry-sub">B.Tech. Computer Science &amp; Biosciences · GPA 7.91/10 · Delhi, India</div>
+                    </div>
                   </div>
-                  <div class="resume-entry-sub">Ph.D. Bioinformatics (Expected May 2027) · M.S. Bioinformatics, 2023 · GPA 3.91 · Atlanta, GA</div>
-                </div>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">Indraprastha Institute of Information Technology</span>
-                    <span class="resume-entry-date">Aug 2018 — Jun 2022</span>
-                  </div>
-                  <div class="resume-entry-sub">B.Tech. Computer Science &amp; Biosciences · GPA 7.91/10 · Delhi, India</div>
-                </div>
-              </div>
 
-              <!-- Experience -->
-              <div class="resume-section">
-                <h2 class="resume-heading">Experience</h2>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">Georgia Institute of Technology — <a href="https://www.sinhalab.net">Sinha Lab</a></span>
-                    <span class="resume-entry-date">Jan 2023 — Present</span>
+                  <!-- Skills -->
+                  <div class="resume-section">
+                    <h2 class="resume-heading">Skills</h2>
+                    <div class="resume-skills-grid">
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/python" class="skill-icon"><span>Python</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/r" class="skill-icon"><span>R</span></div>
+                      <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" class="skill-icon"><span>PyTorch</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/ray" class="skill-icon"><span>Ray</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/scikitlearn" class="skill-icon"><span>Scikit-Learn</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/huggingface" class="skill-icon"><span>Hugging Face</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/weightsandbiases" class="skill-icon"><span>W&B</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/git" class="skill-icon"><span>Git</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/javascript" class="skill-icon"><span>JavaScript</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/cplusplus" class="skill-icon"><span>C/C++</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/mysql" class="skill-icon"><span>SQL</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/keras" class="skill-icon"><span>Keras</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/react" class="skill-icon"><span>React</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/django" class="skill-icon"><span>Django</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/googlecloud" class="skill-icon"><span>GCP</span></div>
+                      <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" class="skill-icon"><span>AWS</span></div>
+                    </div>
                   </div>
-                  <div class="resume-entry-sub"><strong>Researcher</strong> · Atlanta, GA</div>
-                  <ul class="resume-bullets">
-                    <li>Developing computational methods for spatial transcriptomics, single-cell omics, and multimodal biological datasets.</li>
-                    <li>Published 7 papers in journals including Nature Communications, Communications Biology, and Cell Reports.</li>
-                  </ul>
                 </div>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">GlaxoSmithKline</span>
-                    <span class="resume-entry-date">May 2023 — Aug 2023</span>
-                  </div>
-                  <div class="resume-entry-sub"><strong>Computational Biology Intern</strong> · Collegeville, PA</div>
-                  <ul class="resume-bullets">
-                    <li>Designed statistical approaches to map genetic perturbations to disease signatures (MegaMap project).</li>
-                    <li>Infered robust gene-disease relationships and validated them with clinical data.</li>
-                  </ul>
-                </div>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">Indian Institute of Science — <a href="https://at-cg.github.io">ATCG Lab</a></span>
-                    <span class="resume-entry-date">May 2021 — Dec 2021</span>
-                  </div>
-                  <div class="resume-entry-sub"><strong>Research Intern</strong> · Remote, India</div>
-                  <ul class="resume-bullets">
-                    <li>Implemented novel distance metrics and engineered distributed genomic distance framework with Ray, improving indexing time by 90%.</li>
-                  </ul>
-                </div>
-                <div class="resume-entry">
-                  <div class="resume-entry-header">
-                    <span class="resume-entry-title">Wikilimo</a></span>
-                    <span class="resume-entry-date">February 2021 — April 2021</span>
-                  </div>
-                  <div class="resume-entry-sub"><strong>Machine Learning Intern</strong> · Remote, India</div>
-                  <ul class="resume-bullets">
-                    <li>Created explainable AI models for wildfire modeling using SMOS-derived products.</li>
-                  </ul>
-                </div>
-              </div>
 
-              <!-- Skills -->
-              <div class="resume-section">
-                <h2 class="resume-heading">Skills</h2>
-                <div class="resume-skills-grid">
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/python" class="skill-icon"><span>Python</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/r" class="skill-icon"><span>R</span></div>
-                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" class="skill-icon"><span>PyTorch</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/ray" class="skill-icon"><span>Ray</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/scikitlearn" class="skill-icon"><span>Scikit-Learn</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/huggingface" class="skill-icon"><span>Hugging Face</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/weightsandbiases" class="skill-icon"><span>W&B</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/git" class="skill-icon"><span>Git</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/javascript" class="skill-icon"><span>JavaScript</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/cplusplus" class="skill-icon"><span>C/C++</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/mysql" class="skill-icon"><span>SQL</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/keras" class="skill-icon"><span>Keras</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/react" class="skill-icon"><span>React</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/django" class="skill-icon"><span>Django</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/googlecloud" class="skill-icon"><span>GCP</span></div>
-                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" class="skill-icon"><span>AWS</span></div>
+                <div class="resume-main">
+                  <!-- Experience -->
+                  <div class="resume-section">
+                    <h2 class="resume-heading">Experience</h2>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">Georgia Institute of Technology — <a href="https://www.sinhalab.net">Sinha Lab</a></span>
+                        <span class="resume-entry-date">Jan 2023 — Present</span>
+                      </div>
+                      <div class="resume-entry-sub"><strong>Researcher</strong> · Atlanta, GA</div>
+                      <ul class="resume-bullets">
+                        <li>Developing computational methods for spatial transcriptomics, single-cell omics, and multimodal biological datasets.</li>
+                        <li>Published 7 papers in journals including Nature Communications, Communications Biology, and Cell Reports.</li>
+                      </ul>
+                    </div>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">GlaxoSmithKline</span>
+                        <span class="resume-entry-date">May 2023 — Aug 2023</span>
+                      </div>
+                      <div class="resume-entry-sub"><strong>Computational Biology Intern</strong> · Collegeville, PA</div>
+                      <ul class="resume-bullets">
+                        <li>Designed statistical approaches to map genetic perturbations to disease signatures (MegaMap project).</li>
+                        <li>Inferred robust gene-disease relationships and validated them with clinical data.</li>
+                      </ul>
+                    </div>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">Indian Institute of Science — <a href="https://at-cg.github.io">ATCG Lab</a></span>
+                        <span class="resume-entry-date">May 2021 — Dec 2021</span>
+                      </div>
+                      <div class="resume-entry-sub"><strong>Research Intern</strong> · India</div>
+                      <ul class="resume-bullets">
+                        <li>Implemented novel distance metrics and engineered distributed genomic distance framework with Ray, improving indexing time by 90%.</li>
+                      </ul>
+                    </div>
+                    <div class="resume-entry">
+                      <div class="resume-entry-header">
+                        <span class="resume-entry-title">Wikilimo</span>
+                        <span class="resume-entry-date">February 2021 — April 2021</span>
+                      </div>
+                      <div class="resume-entry-sub"><strong>Machine Learning Intern</strong> · India</div>
+                      <ul class="resume-bullets">
+                        <li>Created explainable AI models for wildfire modeling using SMOS-derived products.</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
 
