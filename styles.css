@@ -1,8 +1,9 @@
 :root {
   /* Manual visibility controls: adjust these three values first. */
   --background-opacity: 1.0;
-  --background-saturation: 0.78;
-  --background-contrast: 0.95;
+  --background-saturation: 1.32;
+  --background-contrast: 1.1;
+  --background-brightness: 1.03;
 
   --ink: #101722;
   --body-text: #202b3a;
@@ -41,9 +42,10 @@
 }
 
 :root[data-theme="dark"] {
-  --background-opacity: 0.48;
-  --background-saturation: 0.78;
-  --background-contrast: 0.94;
+  --background-opacity: 0.72;
+  --background-saturation: 1.38;
+  --background-contrast: 1.12;
+  --background-brightness: 1.08;
 
   --ink: #f2f6fc;
   --body-text: #d7deea;
@@ -113,7 +115,10 @@ body {
   border: 0;
   pointer-events: none;
   opacity: var(--background-opacity);
-  filter: saturate(var(--background-saturation)) contrast(var(--background-contrast));
+  filter:
+    saturate(var(--background-saturation))
+    contrast(var(--background-contrast))
+    brightness(var(--background-brightness));
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.94) 18%, rgba(0, 0, 0, 0.72) 64%, rgba(0, 0, 0, 0.28) 88%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.94) 18%, rgba(0, 0, 0, 0.72) 64%, rgba(0, 0, 0, 0.28) 88%, transparent 100%);
 }
@@ -182,7 +187,7 @@ button:focus-visible {
 }
 
 .masthead-inner {
-  min-height: 78px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -252,7 +257,7 @@ button:focus-visible {
 .site-nav-tabs .nav-link {
   position: relative;
   margin: 0;
-  padding: 1.7rem 0 1.55rem;
+  padding: 0.95rem 0 0.9rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -309,10 +314,35 @@ button:focus-visible {
 }
 
 .profile-copy {
-  max-width: 720px;
+  max-width: 760px;
   margin-inline: auto;
   padding: clamp(1.5rem, 4vw, 2.6rem);
-  text-align: center;
+  text-align: left;
+}
+
+.profile-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  margin-bottom: 1.6rem;
+}
+
+.profile-photo {
+  display: block;
+  /* width: clamp(9rem, 21vw, 11rem); */
+  width: clamp(10rem, 24vw, 14rem);
+  aspect-ratio: 1;
+  margin: 0;
+  border: 1px solid var(--reading-border);
+  border-radius: 50%;
+  object-fit: cover;
+  /* filter: saturate(0.86) contrast(1.06) brightness(0.99); */
+  /* filter: grayscale(0.35) contrast(1.1); */
+filter: saturate(0.85) contrast(1.08) hue-rotate(5deg);
+  box-shadow:
+    0 12px 30px var(--glass-shadow),
+    inset 0 0 0 1px var(--glass-highlight-soft);
 }
 
 .eyebrow,
@@ -327,7 +357,7 @@ button:focus-visible {
 
 .profile-copy h1 {
   max-width: 650px;
-  margin: 0 auto 1.35rem;
+  margin: 0;
   color: var(--ink);
   font-size: clamp(2.35rem, 4.8vw, 3.1rem);
   font-weight: 650;
@@ -351,9 +381,17 @@ button:focus-visible {
 }
 
 .profile-copy .profile-lede {
+  max-width: none;
+  margin: 0;
   color: var(--ink);
   font-size: 1.17rem;
   line-height: 1.6;
+  text-align: justify;
+  text-align-last: left;
+}
+
+.profile-copy .profile-lede + .profile-lede {
+  margin-top: 1rem;
 }
 
 .section {
@@ -1080,8 +1118,16 @@ i.skill-icon {
 }
 
 @media (max-width: 480px) {
+  .profile-heading {
+    gap: 0.9rem;
+  }
+
+  .profile-photo {
+    width: 7.5rem;
+  }
+
   .profile-copy h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 
   .resume-document-header h1 {

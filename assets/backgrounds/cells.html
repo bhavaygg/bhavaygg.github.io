@@ -144,13 +144,13 @@
   const GLYPHS = " .:-=+*#%@·o0O|/\\~()ACGU<>v^T";
   const GI = {}; [...GLYPHS].forEach((c, i) => GI[c] = i);
   const RAMP = [..." .:-=+*#%@"].map(c => GI[c]);
-  const ALPHAS = [0.4, 0.62, 0.84, 1];
+  const ALPHAS = [0.55, 0.72, 0.88, 1];
 
   // ---------- palettes (light / dark), 'FG' and 'MUTED' resolve to theme ----------
   const PAL = {
     cell: {
-      dark:  ["#D6DEFF", "#3D7BFF", "#8FB8FF", "#22F59A", "#FF3D7F", "#FFAA1F", "#FFEA3D", "#1FD6F0", "#7680A8", "#FF6A2B", "#FFF1B8", "#B8FF3D", "#B48CFF", "#3A4570", "#FF4FE6", "#A3E635"],
-      light: ["#2E3A80", "#1D4ED8", "#1E3A8A", "#059669", "#E11D48", "#D97706", "#A16207", "#0891B2", "#8089AA", "#EA580C", "#A68A1C", "#4D9F0C", "#7C3AED", "#C9CEE0", "#C026D3", "#65A30D"]
+      dark:  ["#D6DEFF", "#3D7BFF", "#8FB8FF", "#22F59A", "#FF3D7F", "#FFAA1F", "#FFEA3D", "#1FD6F0", "#8F9DCC", "#FF6A2B", "#FFF1B8", "#B8FF3D", "#B48CFF", "#5365A8", "#FF4FE6", "#A3E635"],
+      light: ["#303F9F", "#0D5BFF", "#2436C7", "#00A878", "#F00652", "#F07A00", "#C48A00", "#00A6C9", "#6170A9", "#F4511E", "#B8860B", "#58B000", "#7A35F5", "#9AA8D0", "#D000D6", "#6FAE00"]
     }
   };
   const MEM = 0, NUC = 1, NUCL = 2, ER = 3, MITO = 4, GOL = 5, VES = 6, MT = 7, CYT = 8, LYS = 9, LIP = 10, PER = 11, ACT = 12, ECM = 13, MRNA = 14, ASTRO = 15;
