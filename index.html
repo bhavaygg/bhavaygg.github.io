@@ -4,6 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bhavay Aggarwal</title>
+  <meta name="description" content="Bhavay Aggarwal is a bioinformatics PhD researcher developing computational methods for spatial transcriptomics and single-cell biology.">
+  <script>
+    (() => {
+      let theme = "dark";
+      try {
+        const saved = localStorage.getItem("portfolio-theme");
+        if (saved === "light" || saved === "dark") theme = saved;
+      } catch (_) {}
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,145 +24,99 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-8 col-lg-9">
-        <div class="p-2 p-md-4">
+  <iframe
+    class="cells-background"
+    id="cellsBackground"
+    src="assets/backgrounds/cells.html"
+    title="Interactive ASCII cell background"
+    tabindex="-1"
+    aria-hidden="true"></iframe>
 
-          <!-- Header -->
-          <div class="site-header">
-            <div>
-              <h1>Bhavay Aggarwal</h1>
-              <hr class="name-divider">
-              <div id="icon-list">
-                <a href="https://github.com/bhavaygg" class="me-2 mb-2 d-inline-block">
-                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-brands fa-github me-1"></i>GitHub</button>
-                </a>
-                <a href="https://www.linkedin.com/in/bhavay-aggarwal/" class="me-2 mb-2 d-inline-block">
-                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-brands fa-linkedin me-1"></i>LinkedIn</button>
-                </a>
-                <a href="https://scholar.google.com/citations?user=sstn4FgAAAAJ&hl=en" class="me-2 mb-2 d-inline-block">
-                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-graduation-cap me-1"></i>Google Scholar</button>
-                </a>
-                <a href="mailto:baggarwal9@gatech.edu" class="me-2 mb-2 d-inline-block">
-                  <button type="button" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-envelope me-1"></i>Email</button>
-                </a>
-              </div>
-            </div>
+  <header class="site-masthead">
+    <div class="page-shell masthead-inner">
+      <nav aria-label="Primary navigation">
+        <ul class="nav nav-tabs site-nav-tabs" id="mainTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">About</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="publications-tab" data-bs-toggle="tab" data-bs-target="#publications" type="button" role="tab" aria-controls="publications" aria-selected="false">Publications</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab" aria-controls="resume" aria-selected="false">Resume</button>
+          </li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Change color theme">
+        <i class="fa-solid fa-moon theme-icon theme-icon-moon" aria-hidden="true"></i>
+        <i class="fa-solid fa-sun theme-icon theme-icon-sun" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
 
-            <!-- Tabs top-right -->
-            <ul class="nav nav-tabs site-nav-tabs" id="mainTabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true">Home</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab" aria-controls="more" aria-selected="false">Publications &amp; Projects</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab" aria-controls="resume" aria-selected="false">Resume</button>
-              </li>
-            </ul>
-          </div>
-
-          <div class="tab-content">
+  <main class="page-shell site-main">
+    <div class="tab-content">
 
             <!-- About Tab -->
             <div class="tab-pane fade show active" id="about" role="tabpanel">
+              <div class="about-glass">
 
-              <div id="about-me" class="section">
-                <h3 class="section-heading">About Me</h3>
-                <p>I currently am a final year Bioinformatics PhD student at Georgia Institute of Technology, working in the <a href="https://sites.google.com/view/sinhalaboratorygatech">Sinha Lab</a>.
-                  My work focuses on developing computational methods for spatial transcriptomics and single-cell omics. I build tools to better understand cellular characterization, 
-                  subcellular transcript localization, and cell-cell communication, among other aspects. I am broadly interested in disentangling stochastic effects from biological signals
-                  to better understand what things change and how.</p>
-                <p>Before Georgia Tech, I completed my B.Tech. in Computer Science and Biosciences at IIITD.</p>
-              </div>
+              <section id="about-me" class="profile-intro">
+                <div class="profile-copy">
+                  <!-- <p class="eyebrow">Bioinformatics · Georgia Tech</p> -->
+                  <h1>Bhavay Aggarwal</h1>
+                  <!-- <p class="profile-subtitle">I develop computational methods to understand biology in space.</p> -->
+                  <p class="profile-lede">I am a final-year Bioinformatics PhD student at Georgia Institute of Technology, working in the <a href="https://sites.google.com/view/sinhalaboratorygatech">Sinha Lab</a>. <br><br>
+                  My work focuses on computational methods for spatial transcriptomics and single-cell omics. I build tools to study cellular organization, subcellular transcript localization, and cell-cell communication, with a broader interest in separating biological signal from stochastic variation.<br><br>
+                  Before Georgia Tech, I completed my Bachelor of Engineering in Computer Science and Biosciences at IIIT Delhi.</p>
 
-              <hr class="section-divider">
+                </div>
+              </section>
 
-              <div id="research" class="section">
-                <h3 class="section-heading"><strong>What's New</strong></h3>
+              <section id="research" class="section latest-section">
+                <div class="section-header">
+                  <p class="section-kicker">Updates</p>
+                  <h2>What’s new</h2>
+                </div>
 
                 <div class="research-feed">
                   <article class="research-item">
-                    <div class="research-item-top">
-                      <span class="research-tag">Preprint</span>
-                      <span class="research-meta">2026 · bioRxiv</span>
+                    <time class="research-year" datetime="2026">2026</time>
+                    <div>
+                      <p class="research-meta">Preprint · bioRxiv</p>
+                      <p class="research-description">Introducing SCOUBI, a method that unlocks insights from the extrasomatic space of spatial transcriptomics data.</p>
                     </div>
-                    <p class="research-description">Introducing SCOUBI, a novel method that unlocks insights from the extrasomatic space of spatial transcriptomics data.</p>
                   </article>
                   <article class="research-item">
-                    <div class="research-item-top">
-                      <span class="research-tag">Publication</span>
-                      <span class="research-meta">2025 · Communications Biology</span>
+                    <time class="research-year" datetime="2025">2025</time>
+                    <div>
+                      <p class="research-meta">Publication · Communications Biology</p>
+                      <p class="research-description">Our <a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP paper</a> introduces an interpretable framework for identifying transcript localization patterns in subcellular spatial transcriptomics data.</p>
                     </div>
-                    <p class="research-description">Our <a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP paper</a> is now out in <em>Communications Biology</em>, introducing an interpretable framework for identifying transcript localization patterns in subcellular spatial transcriptomics data.</p>
                   </article>
                   <article class="research-item">
-                    <div class="research-item-top">
-                      <span class="research-tag">Publication</span>
-                      <span class="research-meta">2024 · Nature Communications</span>
+                    <time class="research-year" datetime="2024">2024</time>
+                    <div>
+                      <p class="research-meta">Publication · Nature Communications</p>
+                      <p class="research-description"><a href="https://www.nature.com/articles/s41467-024-49457-w">InSTAnT</a> identifies transcripts that colocalize with one another in individual cells.</p>
                     </div>
-                    <p class="research-description">The <a href="https://www.nature.com/articles/s41467-024-49457-w">InSTAnT</a> method is now published in <em>Nature Communications</em>, a first of its kind framework to identify transcripts that colocalize with one another in individual cells.</p>
                   </article>
                 </div>
+              </section>
+
               </div>
 
             </div>
 
             <!-- Publications & Projects Tab -->
-            <div class="tab-pane fade" id="more" role="tabpanel">
+            <div class="tab-pane fade" id="publications" role="tabpanel">
 
               <div class="cv-section">
                 <h2><span>Publications</span></h2>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.64898/2026.01.20.700581v2.abstract">MANTIS: Analytics toolkit for spatial metabolomics with matching spatial transcriptomics data</a></p>
-                  <p class="pub-authors">Yu Hao, Yeojin Kim, <span class="pub-highlight">Bhavay Aggarwal.</span> and Saurabh Sinha.</p>
-                  <p class="pub-journal">bioRxiv · 2026</p>
+                <div id="publicationsList" aria-live="polite">
+                  <p class="data-status">Loading publications…</p>
                 </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.64898/2026.01.07.697982v1.abstract">CELLWHISPER: Inference of Direct Cell-Cell Communication from Spatial Transcriptomics</a></p>
-                  <p class="pub-authors">Anurendra Kumar, Felix Rivera, <span class="pub-highlight">Bhavay Aggarwal.</span>, Nicholas Zhang, Ahmet Coskun, Saurabh Sinha.</p>
-                  <p class="pub-journal">bioRxiv · 2026</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.nature.com/articles/s42003-025-08891-2">CellSP enables module discovery and visualization for subcellular spatial transcriptomics data</a></p>
-                  <p class="pub-authors"><span class="pub-highlight">Bhavay Aggarwal.</span> and Saurabh Sinha.</p>
-                  <p class="pub-journal">Communications Biology · 2025</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.1101/2025.01.12.632553v1">On-chip 3D potency assay for prediction of clinical outcomes for cell therapy candidates for osteoarthritis</a></p>
-                  <p class="pub-authors">Rebecca S Schneider, Elisa B Nieves, <span class="pub-highlight">Bhavay Aggarwal</span>, Annie C Bowles-Welch, Hazel Y Stevens, Linda E Kippner, Scott D Boden, Kenneth Mautner, Hicham Drissi, Krishnendu Roy, Wilbur A Lam, Saurabh Sinha, Andrés J García.</p>
-                  <p class="pub-journal">Nature Communications · 2025</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.nature.com/articles/s41467-024-49457-w">Intracellular spatial transcriptomic analysis toolkit (InSTAnT)</a></p>
-                  <p class="pub-authors">Anurendra Kumar, Alex W Schrader, <span class="pub-highlight">Bhavay Aggarwal</span>, Ali Ebrahimpour Boroojeny, Marisa Asadian, JuYeon Lee, You Jin Song, Sihai Dave Zhao, Hee-Sun Han, Saurabh Sinha.</p>
-                  <p class="pub-journal">Nature Communications · 2024</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.cell.com/cell-reports/fulltext/S2211-1247(24)00908-2">Investigation of MSC potency metrics via integration of imaging modalities with lipidomic characterization</a></p>
-                  <p class="pub-authors">Priyanka Priyadarshani, Alexandria Van Grouw, Adrian Ross Liversage, Kejie Rui, Arina Nikitina, Kayvan Forouhesh Tehrani, <span class="pub-highlight">Bhavay Aggarwal</span>, Steven L Stice, Saurabh Sinha, Melissa L Kemp, Facundo M Fernández, Luke J Mortensen.</p>
-                  <p class="pub-journal">Cell Reports · 2024</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://www.biorxiv.org/content/10.1101/2021.11.11.468208v1">AgAnt: A computational tool to assess Agonist/Antagonist mode of interaction</a></p>
-                  <p class="pub-authors"><span class="pub-highlight">Bhavay Aggarwal</span> and Arjun Ray.</p>
-                  <p class="pub-journal">bioRxiv · 2021</p>
-                </div>
-
-                <div class="pub-item">
-                  <p class="pub-title"><a href="https://ieeexplore.ieee.org/abstract/document/9094121">Hierarchical clustering of world cuisines</a></p>
-                  <p class="pub-authors">Tript Sharma, Utkarsh Upadhyay, Jushaan Kalra, Sakshi Arora, Saad Ahmad, <span class="pub-highlight">Bhavay Aggarwal</span> and Ganesh Bagler.</p>
-                  <p class="pub-journal">IEEE ICDEW · 2020</p>
-                </div>
+                <noscript><p class="data-status">Enable JavaScript to view publications.</p></noscript>
               </div>
 
               <!-- Projects -->
@@ -184,7 +150,7 @@
                 <div class="fun-work-section">
                   <div class="fun-work-header">
                     <h3>Other Fun Work</h3>
-                    <p>Older builds that were scrappy, hands-on, and a lot of fun to make.</p>
+                    <p>Some projects I have fond memories of.</p>
                   </div>
 
                   <article class="project-feature-card">
@@ -210,24 +176,23 @@
 
             <!-- Resume Tab -->
             <div class="tab-pane fade" id="resume" role="tabpanel">
+              <article class="resume-sheet">
+                <header class="resume-document-header">
+                  <div>
+                    <h1>Bhavay Aggarwal</h1>
+                    <p>AI/ML for Spatial & Multimodal Biology</p>
+                  </div>
+                  <div class="resume-document-contact">
+                    <span>Atlanta, GA</span>
+                    <a href="mailto:baggarwal9@gatech.edu">baggarwal9@gatech.edu</a>
+                    <a href="resume.pdf" target="_blank" rel="noopener noreferrer">View PDF <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                  </div>
+                </header>
 
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <span class="text-secondary" style="font-size:0.85rem;">Georgia Institute of Technology · Atlanta, GA · <a href="mailto:baggarwal9@gatech.edu">baggarwal9@gatech.edu</a></span>
-                <a href="assets/resume.pdf" target="_blank" rel="noopener noreferrer" class="resume-download-link"><i class="fa-solid fa-file-pdf me-1"></i>View as PDF</a>
-              </div>
-
-              <div class="resume-summary-card">
-                <div class="resume-summary-label">About</div>
-                <p class="resume-summary-text">
-                  I am a computational biologist focused on developing robust and interpretable methods for analyzing omics data, with the goal 
-                  of generating meaningful biological insights. My work spans deep learning, statistical modeling, and software development for both 
-                  single-cell and multi-omic datasets.
-
-                  My PhD research is specialized in spatial transcriptomics, with a particular emphasis on methods for analyzing single-molecule spatial data. 
-                  I have experience working independently as well as collaborating within interdisciplinary teams, including internships across diverse 
-                  research and applied settings.
-                </p>
-              </div>
+                <div class="resume-section resume-profile">
+                  <h2>Profile</h2>
+                  <p>I am a computational biologist developing robust and interpretable methods for spatial transcriptomics, single-cell omics, and multimodal biological data. My work spans statistical modeling, machine learning, and scientific software development, with experience leading independent projects and collaborating across experimental and computational teams.</p>
+                </div>
 
               <!-- Education -->
               <div class="resume-section">
@@ -235,16 +200,19 @@
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">Georgia Institute of Technology</span>
-                    <span class="resume-entry-date">Aug 2022 — Present</span>
+                    <span class="resume-entry-date">2022 — Present</span>
                   </div>
-                  <div class="resume-entry-sub">Ph.D. Bioinformatics (Expected May 2027) · M.S. Bioinformatics, 2023 · GPA 3.91 · Atlanta, GA</div>
+                  <div class="resume-entry-degree">Ph.D. in Bioinformatics · Expected May 2027</div>
+                  <div class="resume-entry-sub">M.S. in Bioinformatics, 2023</div>
+                  <div class="resume-entry-meta">GPA: 3.91 · Atlanta, Georgia</div>
                 </div>
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">Indraprastha Institute of Information Technology</span>
-                    <span class="resume-entry-date">Aug 2018 — Jun 2022</span>
+                    <span class="resume-entry-date">2018 — 2022</span>
                   </div>
-                  <div class="resume-entry-sub">B.Tech. Computer Science &amp; Biosciences · GPA 7.91/10 · Delhi, India</div>
+                  <div class="resume-entry-degree">Bachelor of Engineering in Computer Science and Biosciences</div>
+                  <div class="resume-entry-meta">GPA: 7.91/10 · Delhi, India</div>
                 </div>
               </div>
 
@@ -254,9 +222,9 @@
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">Georgia Institute of Technology — <a href="https://www.sinhalab.net">Sinha Lab</a></span>
-                    <span class="resume-entry-date">Jan 2023 — Present</span>
+                    <span class="resume-entry-date">2023 — Present</span>
                   </div>
-                  <div class="resume-entry-sub"><strong>Researcher</strong> · Atlanta, GA</div>
+                  <div class="resume-entry-sub"><strong>Graduate Research Assistant</strong> · Atlanta, GA</div>
                   <ul class="resume-bullets">
                     <li>Developing computational methods for spatial transcriptomics, single-cell omics, and multimodal biological datasets.</li>
                     <li>Published 7 papers in journals including Nature Communications, Communications Biology, and Cell Reports.</li>
@@ -265,7 +233,7 @@
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">GlaxoSmithKline</span>
-                    <span class="resume-entry-date">May 2023 — Aug 2023</span>
+                    <span class="resume-entry-date">2023</span>
                   </div>
                   <div class="resume-entry-sub"><strong>Computational Biology Intern</strong> · Collegeville, PA</div>
                   <ul class="resume-bullets">
@@ -276,7 +244,7 @@
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">Indian Institute of Science — <a href="https://at-cg.github.io">ATCG Lab</a></span>
-                    <span class="resume-entry-date">May 2021 — Dec 2021</span>
+                    <span class="resume-entry-date">2021</span>
                   </div>
                   <div class="resume-entry-sub"><strong>Research Intern</strong> · Remote, India</div>
                   <ul class="resume-bullets">
@@ -286,46 +254,206 @@
                 <div class="resume-entry">
                   <div class="resume-entry-header">
                     <span class="resume-entry-title">Wikilimo</span>
-                    <span class="resume-entry-date">February 2021 — April 2021</span>
+                    <span class="resume-entry-date">2021</span>
                   </div>
                   <div class="resume-entry-sub"><strong>Machine Learning Intern</strong> · Remote, India</div>
                   <ul class="resume-bullets">
                     <li>Created explainable AI models for wildfire modeling using SMOS-derived products.</li>
                   </ul>
                 </div>
-              </div>
-
-              <!-- Skills -->
-              <div class="resume-section">
-                <h2 class="resume-heading">Skills</h2>
-                <div class="resume-skills-grid">
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/python" class="skill-icon"><span>Python</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/r" class="skill-icon"><span>R</span></div>
-                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" class="skill-icon"><span>PyTorch</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/ray" class="skill-icon"><span>Ray</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/scikitlearn" class="skill-icon"><span>Scikit-Learn</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/huggingface" class="skill-icon"><span>Hugging Face</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/weightsandbiases" class="skill-icon"><span>W&B</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/git" class="skill-icon"><span>Git</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/javascript" class="skill-icon"><span>JavaScript</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/cplusplus" class="skill-icon"><span>C/C++</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/mysql" class="skill-icon"><span>SQL</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/keras" class="skill-icon"><span>Keras</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/react" class="skill-icon"><span>React</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/django" class="skill-icon"><span>Django</span></div>
-                  <div class="skill-item"><img src="https://cdn.simpleicons.org/googlecloud" class="skill-icon"><span>GCP</span></div>
-                  <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" class="skill-icon"><span>AWS</span></div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">Complex Systems Lab, IIITD</span>
+                    <span class="resume-entry-date">2020</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Research Intern</strong> · Delhi, India</div>
+                  <ul class="resume-bullets">
+                    <li>Applied language models to uncover contextual relationships among ingredients, translating recipe text into features for computational cuisine analysis.</li>
+                  </ul>
+                </div>
+                <div class="resume-entry">
+                  <div class="resume-entry-header">
+                    <span class="resume-entry-title">All India Institute of Medical Sciences</span>
+                    <span class="resume-entry-date">2020</span>
+                  </div>
+                  <div class="resume-entry-sub"><strong>Research Intern</strong> · Delhi, India</div>
+                  <ul class="resume-bullets">
+                    <li>Created machine learning models to segment brain and neck tumors from X-ray images using super voxels.</li>
+                  </ul>
                 </div>
               </div>
 
+              <!-- Skills -->
+              <div class="resume-section resume-skills">
+                <h2 class="resume-heading">Technical Skills</h2>
+                <div class="resume-skill-groups">
+                  <div class="resume-skill-group">
+                    <h3>Languages</h3>
+                    <div class="resume-skills-grid">
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/python" class="skill-icon" alt=""><span>Python</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/r" class="skill-icon" alt=""><span>R</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/cplusplus" class="skill-icon" alt=""><span>C/C++</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/mysql" class="skill-icon" alt=""><span>SQL</span></div>
+                      <div class="skill-item"><i class="fa-brands fa-java skill-icon" aria-hidden="true"></i><span>Java</span></div>
+                    </div>
+                  </div>
+                  <div class="resume-skill-group">
+                    <h3>Libraries &amp; frameworks</h3>
+                    <div class="resume-skills-grid">
+                      <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" class="skill-icon" alt=""><span>PyTorch</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/keras" class="skill-icon" alt=""><span>Keras</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/scikitlearn" class="skill-icon" alt=""><span>Scikit-learn</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/huggingface" class="skill-icon" alt=""><span>Hugging Face</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-microscope skill-icon" aria-hidden="true"></i><span>Scanpy</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-dna skill-icon" aria-hidden="true"></i><span>Seurat</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-diagram-project skill-icon" aria-hidden="true"></i><span>scvi-tools</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-database skill-icon" aria-hidden="true"></i><span>AnnData</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/numpy" class="skill-icon" alt=""><span>NumPy</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/pandas" class="skill-icon" alt=""><span>Pandas</span></div>
+                    </div>
+                  </div>
+                  <div class="resume-skill-group">
+                    <h3>Tools &amp; platforms</h3>
+                    <div class="resume-skills-grid">
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/git" class="skill-icon" alt=""><span>Git</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/linux" class="skill-icon" alt=""><span>Linux</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-server skill-icon" aria-hidden="true"></i><span>Slurm</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-code-branch skill-icon" aria-hidden="true"></i><span>Snakemake</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/ray" class="skill-icon" alt=""><span>Ray</span></div>
+                      <div class="skill-item"><i class="fa-solid fa-cubes skill-icon" aria-hidden="true"></i><span>Dask</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/anaconda" class="skill-icon" alt=""><span>Conda</span></div>
+                      <div class="skill-item"><i class="fa-brands fa-aws skill-icon" aria-hidden="true"></i><span>AWS</span></div>
+                      <div class="skill-item"><img src="https://cdn.simpleicons.org/googlecloud" class="skill-icon" alt=""><span>GCP</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              </article>
             </div>
 
-          </div><!-- tab-content -->
-        </div>
-      </div>
-    </div>
-  </div>
+    </div><!-- tab-content -->
+
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Social and profile links">
+        <a href="https://github.com/bhavaygg" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+        <a href="https://www.linkedin.com/in/bhavay-aggarwal/" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+        <a href="https://scholar.google.com/citations?user=sstn4FgAAAAJ&amp;hl=en" aria-label="Google Scholar" title="Google Scholar"><i class="fa-brands fa-google-scholar" aria-hidden="true"></i></a>
+        <a href="mailto:baggarwal9@gatech.edu" aria-label="Email" title="Email"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+      </nav>
+    </footer>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="data/publications.js"></script>
+  <script>
+    (() => {
+      const background = document.getElementById("cellsBackground");
+      const masthead = document.querySelector(".site-masthead");
+      const themeToggle = document.getElementById("themeToggle");
+      const publicationsList = document.getElementById("publicationsList");
+
+      const appendHighlightedName = (element, authors) => {
+        const name = "Bhavay Aggarwal";
+        const parts = authors.split(name);
+        parts.forEach((part, index) => {
+          element.append(document.createTextNode(part));
+          if (index < parts.length - 1) {
+            const highlight = document.createElement("span");
+            highlight.className = "pub-highlight";
+            highlight.textContent = name;
+            element.append(highlight);
+          }
+        });
+      };
+
+      const renderPublications = publications => {
+        const fragment = document.createDocumentFragment();
+        publications.forEach(publication => {
+          const item = document.createElement("div");
+          item.className = "pub-item";
+
+          const title = document.createElement("p");
+          title.className = "pub-title";
+          const titleLink = document.createElement("a");
+          titleLink.href = publication.url;
+          titleLink.textContent = publication.title;
+          title.append(titleLink);
+
+          const authors = document.createElement("p");
+          authors.className = "pub-authors";
+          appendHighlightedName(authors, publication.authors);
+
+          const journal = document.createElement("p");
+          journal.className = "pub-journal";
+          journal.textContent = `${publication.venue} · ${publication.year}`;
+
+          const details = document.createElement("details");
+          details.className = "pub-summary";
+          const summary = document.createElement("summary");
+          summary.textContent = "In one sentence";
+          const oneLiner = document.createElement("p");
+          oneLiner.textContent = publication.oneLiner;
+          details.append(summary, oneLiner);
+
+          item.append(title, authors, journal, details);
+          fragment.append(item);
+        });
+        publicationsList.replaceChildren(fragment);
+      };
+
+      const loadPublications = () => {
+        try {
+          const publications = window.PUBLICATIONS;
+          if (!Array.isArray(publications)) throw new Error("Publication data must be an array");
+          renderPublications(publications);
+        } catch (error) {
+          console.error("Could not load publications:", error);
+          publicationsList.innerHTML = '<p class="data-status">Publications could not be loaded.</p>';
+        }
+      };
+      const send = (type, event) => {
+        if (!background.contentWindow) return;
+        background.contentWindow.postMessage({
+          source: "portfolio-cells",
+          type,
+          x: event ? event.clientX : 0,
+          y: event ? event.clientY : 0
+        }, "*");
+      };
+      const sendTheme = theme => {
+        if (!background.contentWindow) return;
+        background.contentWindow.postMessage({ source: "portfolio-cells", type: "theme", theme }, "*");
+      };
+      const applyTheme = (theme, persist = true) => {
+        const next = theme === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = next;
+        document.documentElement.style.colorScheme = next;
+        themeToggle.setAttribute("aria-label", `Switch to ${next === "dark" ? "light" : "dark"} theme`);
+        if (persist) {
+          try { localStorage.setItem("portfolio-theme", next); } catch (_) {}
+        }
+        sendTheme(next);
+      };
+
+      window.addEventListener("pointermove", event => send("move", event), { passive: true });
+      window.addEventListener("pointerdown", event => {
+        if (event.target.closest("a, button, summary, input, select, textarea")) return;
+        send("down", event);
+      }, { passive: true });
+      document.documentElement.addEventListener("mouseleave", () => send("leave"));
+      window.addEventListener("blur", () => send("leave"));
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+      background.addEventListener("load", () => sendTheme(document.documentElement.dataset.theme));
+
+      const syncMasthead = () => masthead.classList.toggle("is-scrolled", window.scrollY > 12);
+      window.addEventListener("scroll", syncMasthead, { passive: true });
+      applyTheme(document.documentElement.dataset.theme, false);
+      syncMasthead();
+      loadPublications();
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,1394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bio ASCII backgrounds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500&family=Spectral:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --fg: #141A2E;
+    --muted: #586078;
+    --panel: rgba(255, 255, 255, 0.84);
+    --line: rgba(20, 26, 46, 0.14);
+    --chip: rgba(20, 26, 46, 0.08);
+    --accent: #2554C7;
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #03060E;
+      --fg: #E7EBF6;
+      --muted: #98A1BC;
+      --panel: rgba(6, 10, 22, 0.74);
+      --line: rgba(231, 235, 246, 0.14);
+      --chip: rgba(231, 235, 246, 0.1);
+      --accent: #85A9FF;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #03060E;
+    --fg: #E7EBF6;
+    --muted: #98A1BC;
+    --panel: rgba(6, 10, 22, 0.74);
+    --line: rgba(231, 235, 246, 0.14);
+    --chip: rgba(231, 235, 246, 0.1);
+    --accent: #85A9FF;
+    color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    height: 100%; margin: 0; overflow: hidden;
+    background: var(--bg); color: var(--fg);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  #hero,
+  .dock { display: none !important; }
+  .stage { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
+  #field { position: absolute; top: 0; left: 0; display: block; }
+
+  #hero {
+    position: relative; z-index: 1; height: 100%;
+    display: grid; place-items: center;
+    padding: 24px 24px 96px; pointer-events: none;
+    text-align: center;
+  }
+  #hero.hidden .copy { visibility: hidden; }
+  .copy { max-width: 40rem; }
+  h1 {
+    font-family: "Spectral", Georgia, "Times New Roman", serif;
+    font-weight: 300;
+    font-size: clamp(2.3rem, 5.6vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -0.012em;
+    margin: 0 0 0.45em;
+  }
+  .lede {
+    font-size: 1.0625rem; line-height: 1.55;
+    color: var(--muted);
+    max-width: 34rem; margin: 0 auto;
+  }
+
+  .dock {
+    position: fixed; z-index: 2;
+    left: 50%; transform: translateX(-50%);
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    width: max-content; max-width: calc(100% - 20px);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 6px 10px; padding: 6px;
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid var(--line); border-radius: 12px;
+    font-size: 0.8125rem; font-weight: 500;
+  }
+  .seg { display: flex; gap: 2px; padding: 2px; border-radius: 9px; }
+  .seg + .seg { border-left: 1px solid var(--line); padding-left: 8px; border-radius: 0; }
+  button {
+    font: inherit; color: var(--muted); background: transparent;
+    border: 0; border-radius: 7px; padding: 6px 11px; cursor: pointer;
+  }
+  button:hover { color: var(--fg); }
+  button[aria-pressed="true"] { color: var(--fg); background: var(--chip); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ctl { display: flex; align-items: center; gap: 8px; color: var(--muted); padding: 0 6px; }
+  input[type="range"] { width: 84px; accent-color: var(--accent); }
+  input[type="checkbox"] { accent-color: var(--accent); margin: 0; }
+  #gene { color: var(--fg); padding: 0 8px; font-variant-numeric: tabular-nums; }
+  #gene[hidden] { display: none; }
+  @media (max-width: 560px) {
+    .seg + .seg { border-left: 0; padding-left: 2px; }
+    #hero { padding-bottom: 140px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage"><canvas id="field" aria-hidden="true"></canvas></div>
+
+<main id="hero">
+  <div class="copy" id="copy">
+    <h1 id="title">A tissue section, typed out</h1>
+    <p class="lede" id="lede"></p>
+  </div>
+</main>
+
+<nav class="dock" aria-label="Background controls">
+  <div class="seg" role="group" aria-label="Background">
+    <button data-mode="light" aria-pressed="false">Light</button>
+    <button data-mode="dark" aria-pressed="false">Dark</button>
+  </div>
+  <div class="seg" role="group" aria-label="Color">
+    <button data-pal="color" aria-pressed="true">Color</button>
+    <button data-pal="ink" aria-pressed="false">Ink</button>
+  </div>
+  <label class="ctl">Size <input id="size" type="range" min="10" max="22" step="1" value="14"></label>
+  <label class="ctl"><input id="showText" type="checkbox" checked> Text</label>
+</nav>
+
+<script>
+(() => {
+  // ---------- copy ----------
+  const COPY = {
+    cells: ["A field of cells",
+      "Cells die off and neighbours divide into the gaps they leave. Click any cell to trigger apoptosis, then watch the space fill back in."]
+  };
+
+  // ---------- glyphs ----------
+  const GLYPHS = " .:-=+*#%@·o0O|/\\~()ACGU<>v^T";
+  const GI = {}; [...GLYPHS].forEach((c, i) => GI[c] = i);
+  const RAMP = [..." .:-=+*#%@"].map(c => GI[c]);
+  const ALPHAS = [0.4, 0.62, 0.84, 1];
+
+  // ---------- palettes (light / dark), 'FG' and 'MUTED' resolve to theme ----------
+  const PAL = {
+    cell: {
+      dark:  ["#D6DEFF", "#3D7BFF", "#8FB8FF", "#22F59A", "#FF3D7F", "#FFAA1F", "#FFEA3D", "#1FD6F0", "#7680A8", "#FF6A2B", "#FFF1B8", "#B8FF3D", "#B48CFF", "#3A4570", "#FF4FE6", "#A3E635"],
+      light: ["#2E3A80", "#1D4ED8", "#1E3A8A", "#059669", "#E11D48", "#D97706", "#A16207", "#0891B2", "#8089AA", "#EA580C", "#A68A1C", "#4D9F0C", "#7C3AED", "#C9CEE0", "#C026D3", "#65A30D"]
+    }
+  };
+  const MEM = 0, NUC = 1, NUCL = 2, ER = 3, MITO = 4, GOL = 5, VES = 6, MT = 7, CYT = 8, LYS = 9, LIP = 10, PER = 11, ACT = 12, ECM = 13, MRNA = 14, ASTRO = 15;
+  PAL.cells = PAL.cell;
+
+  // ---------- state ----------
+  const state = { scene: "cells", pal: "color", size: 15, cellScale: 1.225, text: false };
+  const canvas = document.getElementById("field");
+  const ctx = canvas.getContext("2d", { alpha: false });
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+
+  let W, H, dpr, cw, ch, tw, th, cols, rows, N;
+  let G, C, B, R, P, T, I, M;
+  let TT = 0, TI = 0, hover = null, hoverShown = 0;
+  const tg = (a, b) => { TT = a; TI = b; };
+  let atlas, theme = { bg: "#000", fg: "#fff", muted: "#999", dark: true };
+  let pointer = { x: -1e4, y: -1e4, on: false };
+  let clearBox = { x: 0, y: 0, hw: 0, hh: 0 };
+  let cellGeo = null;
+  let time = 0;
+
+  // ---------- noise ----------
+  function hash2(x, y) {
+    let h = (Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  }
+  const hash3 = (x, y, k) => hash2(x + Math.imul(k | 0, 1013), y ^ Math.imul(k | 0, 7919));
+  function vnoise(x, y) {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = hash2(xi, yi), b = hash2(xi + 1, yi), c = hash2(xi, yi + 1), d = hash2(xi + 1, yi + 1);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+  const fbm = (x, y) => 0.5 * vnoise(x, y) + 0.3 * vnoise(x * 2.03 + 17.1, y * 2.03 - 9.2) + 0.2 * vnoise(x * 4.1 - 3.3, y * 4.1 + 5.7);
+  const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+  const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+  function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  // tangent direction -> line glyph
+  function orient(tx, ty, heavy) {
+    let a = Math.atan2(ty, tx); if (a < 0) a += Math.PI; if (a >= Math.PI) a -= Math.PI;
+    const e = Math.PI / 8;
+    if (a < e || a > 7 * e) return heavy ? GI["="] : GI["-"];
+    if (a < 3 * e) return GI["\\"];
+    if (a < 5 * e) return GI["|"];
+    return GI["/"];
+  }
+
+  // ---------- theme + atlas ----------
+  function readTheme() {
+    const cs = getComputedStyle(document.documentElement);
+    const attr = document.documentElement.getAttribute("data-theme");
+    theme.dark = attr === "dark" || (attr !== "light" && darkMQ.matches);
+    theme.bg = cs.getPropertyValue("--bg").trim() || (theme.dark ? "#03060E" : "#FFFFFF");
+    theme.fg = cs.getPropertyValue("--fg").trim() || (theme.dark ? "#E7EBF6" : "#141A2E");
+    theme.muted = cs.getPropertyValue("--muted").trim() || "#98A1BC";
+  }
+  function resolveColors() {
+    const list = PAL[state.scene][theme.dark ? "dark" : "light"];
+    return list.map(c => {
+      if (state.pal === "ink") return c === "MUTED" ? theme.muted : theme.fg;
+      return c === "FG" ? theme.fg : c === "MUTED" ? theme.muted : c;
+    });
+  }
+  function buildAtlas() {
+    const colors = resolveColors();
+    atlas = document.createElement("canvas");
+    atlas.width = tw * GLYPHS.length;
+    atlas.height = th * colors.length * 4;
+    const a = atlas.getContext("2d");
+    a.font = `${Math.round(state.size * 0.82 * dpr)}px "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
+    a.textAlign = "center"; a.textBaseline = "middle";
+    colors.forEach((col, ci) => {
+      for (let k = 0; k < 4; k++) {
+        a.globalAlpha = ALPHAS[k]; a.fillStyle = col;
+        for (let g = 1; g < GLYPHS.length; g++) {
+          a.fillText(GLYPHS[g], g * tw + tw / 2, (ci * 4 + k) * th + th / 2 + th * 0.04);
+        }
+      }
+    });
+  }
+
+  // ---------- layout ----------
+  function resize() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = window.innerWidth; H = window.innerHeight;
+    tw = Math.max(1, Math.round(state.size * 0.62 * dpr));
+    th = Math.max(1, Math.round(state.size * dpr));
+    cw = tw / dpr; ch = th / dpr;
+    cols = Math.ceil(W / cw); rows = Math.ceil(H / ch); N = cols * rows;
+    canvas.width = cols * tw; canvas.height = rows * th;
+    canvas.style.width = cols * cw + "px"; canvas.style.height = rows * ch + "px";
+    G = new Uint8Array(N); C = new Uint8Array(N); B = new Float32Array(N); R = new Uint8Array(N); P = new Uint8Array(N); T = new Uint8Array(N); I = new Int32Array(N); M = new Uint8Array(N);
+    readTheme(); buildAtlas(); layoutCells(); measureClearing();
+  }
+  function measureClearing() {
+    const el = document.getElementById("copy");
+    const r = el.getBoundingClientRect();
+    clearBox = { x: r.left + r.width / 2, y: r.top + r.height / 2, hw: r.width / 2 + 18, hh: r.height / 2 + 14 };
+  }
+
+  // ---------- scenes: one cell, many cells ----------
+  const DIV_T = 10, APOP_T = 6, GROW_T = 4;
+  const world = { slots: [], cells: [], Sz: 1, single: true, nextDiv: 0, nextApop: 0, pulses: [], seedN: 1 };
+
+  function xy(p) { return { x: p[0], y: p[1] }; }
+
+  // Geometry is built once per cell, in "reference" coordinates centred on its slot.
+  function makeCell(rand, slot, single) {
+    const s = state.size / 14;
+    const cl = { cx: slot.x, cy: slot.y, a: slot.a, b: slot.b, rot: slot.rot, single };
+    cl.cos = Math.cos(cl.rot); cl.sin = Math.sin(cl.rot);
+    cl.m = Math.min(cl.a, cl.b);
+    cl.rho = Math.sqrt(cl.a * cl.b);
+    cl.seed = rand() * 100;
+    cl.rc = Math.max(cl.a, cl.b) * 1.3 + 40 * s;
+    const hA = single ? 0.026 : 0.045;
+    cl.harm = [];
+    for (let k = 2; k <= 5; k++) cl.harm.push({ k, A: hA * (0.4 + rand()) * (2 / k), ph: rand() * 6.283, sp: (rand() - 0.5) * 0.5 });
+    const toW = (lx, ly) => [cl.cx + lx * cl.cos - ly * cl.sin, cl.cy + lx * cl.sin + ly * cl.cos];
+    const rotW = (vx, vy) => [vx * cl.cos - vy * cl.sin, vx * cl.sin + vy * cl.cos];
+    cl.toW = toW;
+    const ms = Math.max(0.35, Math.min(1, cl.m / 330)) * s;
+    cl.ms = ms;
+    const inCell = (lx, ly, f) => (lx / cl.a) ** 2 + (ly / cl.b) ** 2 < f * f;
+    const placed = [];
+    const free = (lx, ly, r) => placed.every(q => Math.hypot(q.lx - lx, q.ly - ly) > q.r + r + 6 * s);
+
+    const land = cl.a >= cl.b;
+    const na = cl.m * 0.47 * (land ? 1.15 : 1), nb = cl.m * 0.47 * (land ? 1 : 1.1);
+    let nlx, nly, dx0, dy0;
+    if (single) {
+      nlx = land ? -cl.a * 0.2 : 0; nly = land ? cl.b * 0.04 : -cl.b * 0.18;
+      dx0 = land ? 0.97 : 0.3; dy0 = land ? -0.24 : 0.95;
+    } else {
+      const side = rand() < 0.5 ? -1 : 1;
+      nlx = -side * cl.a * 0.16; nly = (rand() - 0.5) * cl.b * 0.1;
+      dx0 = side * 0.97; dy0 = (rand() - 0.5) * 0.6;
+    }
+    const dl = Math.hypot(dx0, dy0); dx0 /= dl; dy0 /= dl;
+    cl.nuc = { ...xy(toW(nlx, nly)), na, nb, pores: 22 + Math.floor(rand() * 10) };
+    const sd = Math.sign(dx0) || 1;
+    cl.nucleoli = [{ ...xy(toW(nlx + na * 0.28 * sd, nly - nb * 0.18)), r: na * 0.24 }];
+    if (rand() < 0.55) cl.nucleoli.push({ ...xy(toW(nlx - na * 0.32 * sd, nly + nb * 0.32)), r: na * 0.14 });
+    const glx = nlx + dx0 * na * 1.4, gly = nly + dy0 * nb * 1.4;
+    const Rg = cl.m * 0.42, [gdx, gdy] = rotW(dx0, dy0), [gx, gy] = toW(glx, gly), gsp = 13 * s;
+    cl.golgi = { x: gx, y: gy, dx: gdx, dy: gdy, Rg, sp: gsp, acx: gx + gdx * Rg, acy: gy + gdy * Rg, buds: [] };
+    const beta = Math.atan2(-gdy, -gdx);
+    for (let k = 0; k < 4; k++) for (const sg of [-1, 1]) {
+      const ang = beta + sg * (0.42 - k * 0.05 + 0.16), Rk = Rg - k * gsp;
+      cl.golgi.buds.push({ x: cl.golgi.acx + Math.cos(ang) * Rk, y: cl.golgi.acy + Math.sin(ang) * Rk });
+    }
+    [cl.csx, cl.csy] = toW(nlx + dx0 * na * 1.18 - dy0 * cl.m * 0.2, nly + dy0 * nb * 1.18 + dx0 * cl.m * 0.2);
+    const nucOK = (lx, ly, f) => ((lx - nlx) / na) ** 2 + ((ly - nly) / nb) ** 2 > f * f;
+    const golgiOK = (lx, ly, d) => Math.hypot(lx - glx, ly - gly) > d;
+
+    cl.mitos = [];
+    const mTarget = clamp(Math.round(cl.a * cl.b / (single ? 16000 : 13000)), 3, 16);
+    for (let tries = 0; tries < 700 && cl.mitos.length < mTarget; tries++) {
+      const lx = (rand() * 2 - 1) * cl.a, ly = (rand() * 2 - 1) * cl.b;
+      const L = (95 + rand() * 60) * ms, w = Math.max(20 * s, (28 + rand() * 8) * ms);
+      if (!inCell(lx, ly, 0.76) || !nucOK(lx, ly, 1.45) || !golgiOK(lx, ly, cl.m * 0.35) || !free(lx, ly, L * 0.42)) continue;
+      placed.push({ lx, ly, r: L * 0.42 });
+      cl.mitos.push({ ...xy(toW(lx, ly)), L, w, ang: rand() * Math.PI, ph: rand() * 6.283 });
+    }
+    cl.disks = [];
+    const area = cl.a * cl.b;
+    const kinds = [
+      ["lys", clamp(Math.round(area / 40000), 1, 6), 12, 8],
+      ["end", clamp(Math.round(area / 70000), 1, 3), 13, 6],
+      ["lip", rand() < 0.75 ? clamp(Math.round(area / 80000), 1, 3) : 0, 15, 10],
+      ["per", clamp(Math.round(area / 26000), 2, 8), 5, 0]
+    ];
+    for (const [kind, count, r0, rv] of kinds) {
+      let made = 0;
+      for (let tries = 0; tries < 400 && made < count; tries++) {
+        const lx = (rand() * 2 - 1) * cl.a, ly = (rand() * 2 - 1) * cl.b, r = (r0 + rand() * rv) * ms;
+        if (!inCell(lx, ly, 0.8) || !nucOK(lx, ly, 1.3) || !golgiOK(lx, ly, cl.m * 0.3) || !free(lx, ly, r)) continue;
+        placed.push({ lx, ly, r }); made++;
+        cl.disks.push({ kind, ...xy(toW(lx, ly)), r, ph: rand() * 6.283 });
+      }
+    }
+    cl.K = clamp(Math.round(cl.m / 22), 12, 20);
+    cl.ves = [];
+    for (let k = 0; k < cl.K; k++) for (let j = 0; j < 3; j++) cl.ves.push({ k, h: rand(), spd: 0.025 + rand() * 0.04, dir: rand() < 0.55 ? 1 : -1, big: rand() < 0.3 });
+    const fa = cl.rot + (rand() - 0.5) * 0.7;
+    cl.fib = { c: Math.cos(fa), s: Math.sin(fa), sp: 34 * s, off: rand() * 50 };
+    const nf = Math.round(Math.PI * (cl.a + cl.b) / (single ? 120 : 95));
+    cl.filo = [];
+    for (let k = 0; k < nf; k++) cl.filo.push({ th: rand() * 6.283, len: (10 + rand() * 24) * s, ph: rand() * 6.283 });
+
+    // projections
+    const lamTh = Math.atan2(dy0 / cl.b, dx0 / cl.a);
+    cl.cil = null;
+    if (single) {
+      const [fx, fy] = rotW(dx0, dy0);
+      cl.lam = { th: lamTh, hw: 0.55, A: 0.07, depth: 34 * s, fx, fy };
+    } else {
+      // astrocyte: a star of fine branching processes ending in endfeet
+      // neuron-like: dendrite trees with spines, plus an axon to a neighbour (drawn separately)
+      cl.filo = [];
+      cl.ptype = slot.astro ? "astro" : "neuro";
+      cl.procs = [];
+      const astro = cl.ptype === "astro";
+      const axTh = slot.axTarget ? Math.atan2(slot.axTarget.y - slot.y, slot.axTarget.x - slot.x) : null;
+      const nP = astro ? 6 + Math.floor(rand() * 4) : 2 + Math.floor(rand() * 2), base0 = rand() * 6.283;
+      for (let j = 0; j < nP; j++) {
+        const wa = base0 + j * 6.283 / nP + (rand() - 0.5) * 0.4;
+        if (axTh != null && Math.abs(Math.atan2(Math.sin(wa - axTh), Math.cos(wa - axTh))) < 0.6) continue;
+        const la = wa - cl.rot, thu = Math.atan2(Math.sin(la) / cl.b, Math.cos(la) / cl.a);
+        const [sx, sy] = toW(Math.cos(thu) * cl.a, Math.sin(thu) * cl.b);
+        const len = cl.m * (astro ? 0.5 + rand() * 0.35 : 0.45 + rand() * 0.25);
+        growBranch(rand, cl.procs, sx + Math.cos(wa) * 4 * s, sy + Math.sin(wa) * 4 * s, wa, len, 0, 2, -1, 0, s * (astro ? 0.75 : 1));
+      }
+    }
+
+    // mRNAs: transcription site -> nuclear pore -> track -> translated at a destination
+    cl.mrna = [];
+    const mN = clamp(Math.round(area / 9000), 4, 18);
+    for (let tries = 0; tries < 300 && cl.mrna.length < mN; tries++) {
+      const pk = Math.floor(rand() * cl.nuc.pores);
+      const pth = (Math.PI / 2 + 2 * Math.PI * pk - cl.seed) / cl.nuc.pores;
+      const plx = nlx + Math.cos(pth) * na, ply = nly + Math.sin(pth) * nb;
+      let onx = Math.cos(pth) / na, ony = Math.sin(pth) / nb; const onl = Math.hypot(onx, ony); onx /= onl; ony /= onl;
+      const sr = 0.2 + rand() * 0.45, sa = rand() * 6.283;
+      const slx = nlx + Math.cos(sa) * na * sr, sly = nly + Math.sin(sa) * nb * sr;
+      const da = Math.atan2(ony, onx) + (rand() - 0.5) * 1.4, dist = cl.m * (0.25 + rand() * 0.35);
+      const dlx = plx + Math.cos(da) * dist, dly = ply + Math.sin(da) * dist;
+      if (!inCell(dlx, dly, 0.85) || !nucOK(dlx, dly, 1.3)) continue;
+      const ddx = dlx - plx, ddy = dly - ply, dl2 = Math.hypot(ddx, ddy) || 1;
+      const [ux, uy] = rotW(ddx / dl2, ddy / dl2);
+      cl.mrna.push({
+        s: xy(toW(slx, sly)), p: xy(toW(plx, ply)), o: xy(toW(plx + onx * 10 * s, ply + ony * 10 * s)), d: xy(toW(dlx, dly)),
+        dir: [ux, uy], perp: [-uy, ux], bow: (rand() - 0.5) * 0.3 * dl2,
+        T: 7 + rand() * 4, off: rand() * 20, steps: 4 + Math.floor(rand() * 3), ph: rand() * 6.283
+      });
+    }
+    return cl;
+  }
+
+  function newCell(slot, gs) {
+    const geo = makeCell(rng(1000 + world.seedN++ * 7919), slot, world.single);
+    slot.empty = false; slot.reserved = false;
+    return { geo, slot, state: "live", t0: 0, p: 0, gs, bx: slot.x, by: slot.y, bk: 1, X: slot.x, Y: slot.y, k: 1, fresh: 1 };
+  }
+
+  function layoutCells() {
+    const rand = rng(11);
+    world.pulses = []; world.cells = []; world.slots = []; world.tnts = []; world.seedN = 1;
+    world.single = state.scene !== "cells";
+    const tNow = reduce.matches ? 20 : time;
+    if (world.single) {
+      world.slots.push({ x: W / 2, y: H / 2, a: W * 0.47, b: H * 0.44, rot: 0 });
+      world.Sz = Math.min(W, H);
+    } else {
+      // whole cells at the edges: fit an integer number of columns and rows to the viewport
+      const Sz0 = clamp(Math.min(W, H) * 0.3, 130, 250);
+      const baseColumns = Math.max(2, Math.round(W / Sz0));
+      const ncol = Math.max(2, Math.round(baseColumns / state.cellScale)), Sz = W / ncol;
+      const nrow = Math.max(2, Math.round(H / Sz)), rh = H / nrow;
+      for (let j = 0; j < nrow; j++) for (let i = 0; i < ncol; i++) {
+        const x = (i + 0.5) * Sz + (rand() - 0.5) * Sz * 0.18;
+        const y = (j + 0.5) * rh + (rand() - 0.5) * rh * 0.18;
+        const a = Math.min(Sz, rh) * (0.4 + rand() * 0.08), b = a * (0.7 + rand() * 0.22);
+        world.slots.push({ x, y, a, b, rot: rand() * Math.PI });
+      }
+      for (const p of world.slots) {
+        let f = 1;
+        for (const q of world.slots) if (q !== p) {
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          f = Math.min(f, (d - 34) * 0.92 / (Math.max(p.a, p.b) * 1.06 + Math.max(q.a, q.b) * 1.06));
+        }
+        p.a *= f; p.b *= f;
+      }
+      world.Sz = Sz;
+      for (const sl of world.slots) {
+        sl.astro = false;
+        sl.axTarget = null;
+        if (!sl.astro && rand() < 0.75) {
+          const near = world.slots.filter(o => o !== sl && Math.hypot(o.x - sl.x, o.y - sl.y) < Sz * 2)
+            .sort((a, b) => Math.hypot(a.x - sl.x, a.y - sl.y) - Math.hypot(b.x - sl.x, b.y - sl.y)).slice(0, 3);
+          if (near.length) sl.axTarget = near[Math.floor(rand() * near.length)];
+        }
+        sl.axBow = (rand() - 0.5) * 2; sl.axPer = 1.4 + rand() * 1.8; sl.axOff = rand() * 10;
+      }
+    }
+    for (const s of world.slots) world.cells.push(newCell(s, null));
+    if (!world.single && world.cells.length > 3) {
+      const onScreen = s => s.x > 0 && s.x < W && s.y > 0 && s.y < H;
+      let best = null, bd = 1e9;
+      for (const c of world.cells) { const d = Math.hypot(c.slot.x - W * 0.78, c.slot.y - H * 0.28); if (d < bd && onScreen(c.slot)) { bd = d; best = c; } }
+      if (best) {
+        let nb = null, nd = 1e9;
+        for (const c of world.cells) if (c !== best) { const d = Math.hypot(c.slot.x - best.slot.x, c.slot.y - best.slot.y) + (onScreen(c.slot) ? 0 : 200); if (d < nd) { nd = d; nb = c; } }
+        if (nb) {
+          world.cells = world.cells.filter(c => c !== nb);
+          nb.slot.empty = true; nb.slot.since = tNow;
+          startDiv(best, nb.slot, tNow - 3.9);
+        }
+      }
+    }
+    world.nextDiv = tNow + 1; world.nextApop = tNow + 3;
+  }
+
+  function xform(cl, t) {
+    let X = cl.bx, Y = cl.by, k = cl.bk, fresh = 1;
+    if (cl.gs) {
+      const g = smooth(0, 1, (t - cl.gs.t0) / GROW_T);
+      X = cl.gs.X0 + (cl.slot.x - cl.gs.X0) * g; Y = cl.gs.Y0 + (cl.slot.y - cl.gs.Y0) * g;
+      k = cl.gs.k0 + (1 - cl.gs.k0) * g;
+      fresh = 0.2 + 0.8 * smooth(0, 2.4, t - cl.gs.t0);
+      if (g >= 1 && t - cl.gs.t0 > 2.4) { cl.gs = null; cl.bx = cl.slot.x; cl.by = cl.slot.y; cl.bk = 1; }
+    }
+    cl.orgF = 1; cl.nucOn = true; cl.ns = 1; cl.chromB = 0; cl.poreT = 0.9; cl.retract = 1; cl.round = 0;
+    if (cl.state === "apop") {
+      const p = cl.p = (t - cl.t0) / APOP_T;
+      k *= 1 - 0.28 * smooth(0.05, 0.5, p);
+      cl.orgF = 1 - smooth(0.2, 0.45, p); cl.ns = 1 - 0.42 * smooth(0.05, 0.35, p);
+      cl.chromB = 0.55 * smooth(0.05, 0.3, p); cl.nucOn = p < 0.38; cl.retract = 1 - smooth(0, 0.2, p);
+    } else if (cl.state === "div") {
+      const p = cl.p = (t - cl.t0) / DIV_T;
+      cl.orgF = 1 - smooth(0.04, 0.18, p); cl.chromB = 0.5 * smooth(0, 0.12, p); cl.nucOn = p < 0.14;
+      cl.poreT = 0.9 - 6 * smooth(0.02, 0.14, p); cl.retract = 1 - smooth(0, 0.15, p); cl.round = smooth(0.03, 0.2, p);
+    }
+    cl.X = X; cl.Y = Y; cl.k = k; cl.fresh = fresh;
+  }
+
+  function freeze(cl, t) { xform(cl, t); cl.bx = cl.X; cl.by = cl.Y; cl.bk = cl.k; cl.gs = null; }
+
+  function startApop(cl, t) {
+    freeze(cl, t);
+    cl.state = "apop"; cl.t0 = t; cl.p = 0;
+    const n = 6 + Math.floor(Math.random() * 3);
+    cl.blebs = [];
+    for (let i = 0; i < n; i++) cl.blebs.push({ th: (i + 0.2 + Math.random() * 0.6) / n * 6.283, ph: Math.random() * 6.283, rB: 0.16 + Math.random() * 0.1, dna: i % 3 === 0 });
+    cl.frags = [];
+    for (let i = 0; i < 5; i++) cl.frags.push({ ang: Math.random() * 6.283, d: 0.4 + Math.random() * 0.6 });
+  }
+
+  function startDiv(cl, slot, t) {
+    freeze(cl, t);
+    cl.state = "div"; cl.t0 = t; cl.p = 0; slot.reserved = true;
+    let ax = slot.x - cl.slot.x, ay = slot.y - cl.slot.y; const l = Math.hypot(ax, ay) || 1; ax /= l; ay /= l;
+    const rho = cl.geo.rho, n = clamp(Math.floor(rho * 1.2 / (2.3 * ch)), 4, 10);
+    const chroms = [];
+    for (let k = 0; k < n; k++) chroms.push({ v: ((k - (n - 1) / 2) / n) * 1.1, ph: Math.random() * 6.283, sx: Math.random() * 2 - 1, sy: Math.random() * 2 - 1 });
+    cl.div = { ax, ay, target: slot, chroms };
+  }
+
+  function dumbbell(cl, p) {
+    const d = cl.div, rhoS = cl.geo.rho * cl.k, q = smooth(0.6, 0.84, p), e = smooth(0.84, 1, p);
+    const sep = rhoS * (0.62 * q + 0.22 * e), rr = rhoS * (1 - 0.27 * q);
+    return { h1x: cl.X - d.ax * sep, h1y: cl.Y - d.ay * sep, h2x: cl.X + d.ax * sep, h2y: cl.Y + d.ay * sep, rr, sep, q };
+  }
+
+  function spawnDaughters(cl, t, out) {
+    const d = cl.div, D = dumbbell(cl, 1);
+    const A = newCell(cl.slot, { X0: D.h1x, Y0: D.h1y, k0: D.rr / Math.sqrt(cl.slot.a * cl.slot.b), t0: t });
+    const B2 = newCell(d.target, { X0: D.h2x, Y0: D.h2y, k0: D.rr / Math.sqrt(d.target.a * d.target.b), t0: t });
+    xform(A, t); xform(B2, t); out.push(A, B2);
+  }
+
+  function updateWorld(t) {
+    const out = [];
+    for (const cl of world.cells) {
+      xform(cl, t);
+      if (cl.state === "apop" && cl.p >= 1) { cl.slot.empty = true; cl.slot.since = t; continue; }
+      if (cl.state === "div" && cl.p >= 1) { spawnDaughters(cl, t, out); continue; }
+      out.push(cl);
+    }
+    world.cells = out;
+    world.pulses = world.pulses.filter(pu => t - pu.t < 0.9 && t >= pu.t);
+    if (reduce.matches) return;
+    const regrow = s => { const cl = newCell(s, { X0: s.x, Y0: s.y, k0: 0.3, t0: t }); xform(cl, t); world.cells.push(cl); };
+    if (world.single) {
+      const s = world.slots[0];
+      if (s.empty && t - s.since > 1.2) regrow(s);
+      return;
+    }
+    const settled = c => c.state === "live" && !c.gs;
+    const empties = world.slots.filter(s => s.empty && !s.reserved);
+    if (t > world.nextDiv && empties.length) {
+      const vis = c => (c.X > 0 && c.X < W && c.Y > 0 && c.Y < H) ? 0 : world.Sz;
+      for (const s of empties.sort(() => Math.random() - 0.5)) {
+        if (t - s.since < 0.8) continue;
+        const nb = world.cells.filter(c => settled(c) && Math.hypot(c.slot.x - s.x, c.slot.y - s.y) < world.Sz * 1.5)
+          .sort((a, b) => (Math.hypot(a.slot.x - s.x, a.slot.y - s.y) + vis(a)) - (Math.hypot(b.slot.x - s.x, b.slot.y - s.y) + vis(b)));
+        if (nb.length) { startDiv(nb[Math.floor(Math.random() * Math.min(2, nb.length))], s, t); world.nextDiv = t + 0.6 + Math.random() * 1.2; break; }
+        if (t - s.since > 12) { regrow(s); break; }
+      }
+    }
+    if (t > world.nextApop) {
+      world.nextApop = t + 3.5 + Math.random() * 4;
+      const busy = empties.length > 2 || world.cells.filter(c => c.state === "apop").length >= 2;
+      if (!busy) {
+        const cand = world.cells.filter(c => settled(c) && c.X > 0 && c.X < W && c.Y > 0 && c.Y < H);
+        if (cand.length) startApop(cand[Math.floor(Math.random() * cand.length)], t);
+      }
+    }
+  }
+
+  function killAt(x, y) {
+    world.pulses.push({ x, y, t: time });
+    for (const cl of world.cells) {
+      if (cl.state !== "live") continue;
+      const g = cl.geo, dx = (x - cl.X) / cl.k, dy = (y - cl.Y) / cl.k;
+      const lx = dx * g.cos + dy * g.sin, ly = -dx * g.sin + dy * g.cos;
+      if ((lx / g.a) ** 2 + (ly / g.b) ** 2 < 1.1) { startApop(cl, time); return; }
+    }
+  }
+
+  function cellRm(g, th, t) { let R = 1; for (const h of g.harm) R += h.A * Math.sin(h.k * th + h.ph + t * h.sp); return R; }
+
+  function set(i, g, col, b) { G[i] = g; R[i] = 0; C[i] = col; B[i] = b; T[i] = TT; I[i] = TI; }
+
+  function stampLine(x0, y0, x1, y1, col, b, gl) {
+    const dx = x1 - x0, dy = y1 - y0, len = Math.hypot(dx, dy); if (len < 1 || b < 0.05) return;
+    const g = gl != null ? gl : orient(dx, dy, false);
+    const n = Math.ceil(len / (Math.min(cw, ch) * 0.5));
+    let last = -1;
+    for (let k = 0; k <= n; k++) {
+      const c = Math.floor((x0 + dx * k / n) / cw), r = Math.floor((y0 + dy * k / n) / ch);
+      if (c < 0 || r < 0 || c >= cols || r >= rows) continue;
+      const i = r * cols + c; if (i === last || P[i]) continue; last = i;
+      set(i, g, col, b);
+    }
+  }
+  function stampChar(x, y, g, col, b) {
+    const c = Math.floor(x / cw), r = Math.floor(y / ch);
+    if (c < 0 || r < 0 || c >= cols || r >= rows) return -1;
+    const i = r * cols + c; if (P[i]) return -1;
+    set(i, g, col, b); return i;
+  }
+  function stampTrio(x, y, mid, col, b, midCol) {
+    const i = stampChar(x, y, GI[mid], midCol != null ? midCol : col, b);
+    if (i < 0) return;
+    const c = i % cols;
+    if (c > 0 && !P[i - 1]) set(i - 1, GI["("], col, b * 0.8);
+    if (c < cols - 1 && !P[i + 1]) set(i + 1, GI[")"], col, b * 0.8);
+  }
+  function stampDisk(x0, y0, rad, col, fillG, fillB, edgeB, fillCol) {
+    const fc = fillCol != null ? fillCol : col;
+    const c0 = Math.max(0, Math.floor((x0 - rad) / cw)), c1 = Math.min(cols - 1, Math.floor((x0 + rad) / cw));
+    const r0 = Math.max(0, Math.floor((y0 - rad) / ch)), r1 = Math.min(rows - 1, Math.floor((y0 + rad) / ch));
+    for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+      const i = r * cols + c; if (P[i]) continue;
+      const dx = (c + 0.5) * cw - x0, dy = (r + 0.5) * ch - y0, d = Math.hypot(dx, dy);
+      if (d > rad) continue;
+      const nx = dx / (d || 1), ny = dy / (d || 1), thr = 0.5 * (cw * Math.abs(nx) + ch * Math.abs(ny));
+      if (d > rad - thr) set(i, orient(-ny, nx, false), col, edgeB);
+      else set(i, fillG, fc, fillB);
+    }
+  }
+  function stampMito(o, mx, my, sc, t, fade) {
+    if (fade < 0.05) return;
+    const s = state.size / 14;
+    const ang = o.ang + 0.35 * Math.sin(t * 0.07 + o.ph), ca = Math.cos(ang), sa = Math.sin(ang);
+    const L = o.L * sc, w = o.w * sc, hl = L / 2 - w / 2, rad = w / 2, ext = L / 2 + 4;
+    const c0 = Math.max(0, Math.floor((mx - ext) / cw)), c1 = Math.min(cols - 1, Math.ceil((mx + ext) / cw));
+    const r0 = Math.max(0, Math.floor((my - ext) / ch)), r1 = Math.min(rows - 1, Math.ceil((my + ext) / ch));
+    for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+      const i = r * cols + c; if (P[i]) continue;
+      const x = (c + 0.5) * cw - mx, y = (r + 0.5) * ch - my;
+      const lx = x * ca + y * sa, ly = -x * sa + y * ca;
+      const qx = Math.max(Math.abs(lx) - hl, 0), d = Math.hypot(qx, ly) - rad;
+      if (d > 0) continue;
+      let nlx = qx > 0 ? Math.sign(lx) * qx : 0, nly = ly; const nl = Math.hypot(nlx, nly) || 1; nlx /= nl; nly /= nl;
+      const snx = nlx * ca - nly * sa, sny = nlx * sa + nly * ca;
+      const thr = 0.5 * (cw * Math.abs(snx) + ch * Math.abs(sny));
+      if (d > -thr) set(i, orient(-sny, snx, false), MITO, 0.92 * fade);
+      else if (Math.sin(lx / sc * 0.4 / s + o.ph * 3) > 0.2) set(i, orient(-sa, ca, false), MITO, 0.62 * fade);
+      else set(i, GI["."], MITO, 0.3 * fade);
+    }
+  }
+  function stampOrg(d, x, y, sc, fade) {
+    if (fade < 0.05) return;
+    if (d.kind === "per") { stampChar(x, y, GI["*"], PER, 0.85 * fade); return; }
+    const r = d.r * sc, small = r < ch * 0.8;
+    if (d.kind === "lys") small ? stampTrio(x, y, "#", LYS, 0.95 * fade) : stampDisk(x, y, r, LYS, GI["%"], 0.7 * fade, 0.95 * fade);
+    else if (d.kind === "end") small ? stampTrio(x, y, ":", VES, 0.85 * fade) : stampDisk(x, y, r, VES, GI["o"], 0.6 * fade, 0.85 * fade);
+    else small ? stampTrio(x, y, "0", LIP, 0.9 * fade) : stampDisk(x, y, r, LIP, GI["·"], 0.25 * fade, 0.9 * fade);
+  }
+  function arrow(ax, ay) {
+    return Math.abs(ax) >= Math.abs(ay) ? (ax > 0 ? GI[">"] : GI["<"]) : (ay > 0 ? GI["v"] : GI["^"]);
+  }
+
+  // ----- per-character pass -----
+  function pixelEllipse(cl, i, c, r, x, y, t) {
+    const g = cl.geo, k = cl.k;
+    if (Math.abs(x - cl.X) > g.rc * k || Math.abs(y - cl.Y) > g.rc * k) return false;
+    const dx = (x - cl.X) / k, dy = (y - cl.Y) / k;
+    const lx = dx * g.cos + dy * g.sin, ly = -dx * g.sin + dy * g.cos;
+    const ux = lx / g.a, uy = ly / g.b, rr = Math.hypot(ux, uy) || 1e-6;
+    if (rr > 1.35) return false;
+    const th = Math.atan2(uy, ux);
+    let Rm = cellRm(g, th, t);
+    if (cl.round > 0) {
+      const ca = Math.cos(th), sa = Math.sin(th);
+      Rm = Rm * (1 - cl.round) + cl.round * g.rho / Math.sqrt(g.a * g.a * ca * ca + g.b * g.b * sa * sa);
+    }
+    Rm += lamBump(cl, th, t);
+    if (cl.state === "apop") {
+      const amp = 0.14 * smooth(0.06, 0.4, cl.p);
+      for (const bl of cl.blebs) {
+        const da = Math.atan2(Math.sin(th - bl.th), Math.cos(th - bl.th));
+        Rm += amp * (0.65 + 0.35 * Math.sin(t * 3.5 + bl.ph)) * Math.exp(-((da / 0.22) ** 2));
+      }
+    }
+    let gx = ux / g.a, gy = uy / g.b; const gl = Math.hypot(gx, gy) || 1e-6;
+    const md = (rr - Rm) * rr / gl; gx /= gl; gy /= gl;
+    const wx = gx * g.cos - gy * g.sin, wy = gx * g.sin + gy * g.cos;
+    const mthr = 0.37 * (cw * Math.abs(wx) + ch * Math.abs(wy)) / k;
+    if (md > mthr) return false;
+    if (md > -mthr) { tg(1, cl.base + 1); set(i, orient(-wy, wx, true), MEM, 0.88); P[i] = 1; return true; }
+    cellInterior(cl, i, c, r, g.cx + dx, g.cy + dy, rr, Rm, md, t, th);
+    return true;
+  }
+
+  function cellInterior(cl, i, c, r, x, y, rr, Rm, md, t, th) {
+    const g = cl.geo, s = state.size / 14, cwk = cw / cl.k, chk = ch / cl.k, F = cl.fresh, O = cl.orgF * F;
+    if (g.lam && cl.retract > 0.05) {
+      const L = g.lam, da = Math.atan2(Math.sin(th - L.th), Math.cos(th - L.th)), w = Math.exp(-((da / L.hw) ** 2)) * cl.retract;
+      if (w > 0.25 && md > -L.depth * w) {
+        const v = vnoise(x * 0.16 + t * 0.5 * L.fx, y * 0.16 + t * 0.5 * L.fy);
+        if (v > 0.26) { tg(28, cl.base + 13); set(i, v > 0.6 ? GI["/"] : v > 0.43 ? GI["\\"] : GI[":"], ACT, (0.5 + 0.4 * w) * F); return; }
+      }
+    }
+    const n = g.nuc, ndx = x - n.x, ndy = y - n.y;
+    const nlx = ndx * g.cos + ndy * g.sin, nly = -ndx * g.sin + ndy * g.cos;
+    const na = n.na * cl.ns, nb = n.nb * cl.ns;
+    const vx = nlx / na, vy = nly / nb, nth = Math.atan2(vy, vx);
+    const wob = 1 + 0.025 * Math.sin(4 * nth + t * 0.25 + g.seed) + 0.015 * Math.sin(7 * nth - t * 0.2);
+    const nr = (Math.hypot(vx, vy) || 1e-6) / wob;
+    if (cl.nucOn) {
+      let ngx = vx / na, ngy = vy / nb; const ngl = Math.hypot(ngx, ngy) || 1e-6;
+      const ed = (nr - 1) * nr / ngl; ngx /= ngl; ngy /= ngl;
+      const wnx = ngx * g.cos - ngy * g.sin, wny = ngx * g.sin + ngy * g.cos;
+      const ethr = 0.5 * (cwk * Math.abs(wnx) + chk * Math.abs(wny));
+      if (Math.abs(ed) < ethr) {
+        P[i] = 1;
+        if (Math.sin(nth * n.pores + g.seed) > cl.poreT) return;
+        tg(2, cl.base + 2); set(i, orient(-wny, wnx, false), NUC, 0.92); return;
+      }
+      if (nr < 1) {
+        P[i] = 1; G[i] = 1; R[i] = 1; T[i] = 2; I[i] = cl.base + 2;
+        if (cl.chromB < 0.2) for (const no of g.nucleoli) {
+          const dl = Math.hypot((x - no.x) / no.r, (y - no.y) / (no.r * 0.85)) + 0.3 * (vnoise(x * 0.05 + g.seed, y * 0.05 + t * 0.1) - 0.5);
+          if (dl < 1) { T[i] = 3; I[i] = cl.base + 3; C[i] = NUCL; B[i] = (dl < 0.38 ? 1 : 0.62 + 0.28 * (1 - dl)) * F; return; }
+        }
+        const cf = fbm(x * 0.028 + t * 0.02 + g.seed, y * 0.028 - t * 0.015);
+        const clump = vnoise(x * 0.07 + g.seed, y * 0.07) > 0.74 ? 0.3 : 0;
+        C[i] = NUC;
+        B[i] = (0.08 + Math.max(0, cf - 0.42) * 2.2 + 0.32 * smooth(0.8, 0.97, nr) + clump + cl.chromB * smooth(0.45, 0.62, cf)) * F;
+        // hovering the nucleus reads out its DNA, with the odd variant base in red
+        if (pointer.on && hover && (hover.inst === cl.base + 2 || hover.inst === cl.base + 3)) {
+          const pd = Math.hypot((c + 0.5) * cw - pointer.x, (r + 0.5) * ch - pointer.y);
+          if (pd < 95) {
+            const f = 1 - pd / 95, slot = Math.floor(t * 1.6 + hash3(c, r, 11) * 4);
+            if (hash3(c, r, slot) < 0.2 + 0.7 * f) {
+              const variant = hash3(c, r, slot + 900) < 0.05;
+              G[i] = GI["ACGT"[Math.floor(hash3(c, r, slot + 500) * 4)]]; R[i] = 0;
+              C[i] = variant ? MITO : NUC; B[i] = variant ? 1 : 0.55 + 0.4 * f;
+            }
+          }
+        }
+        return;
+      }
+    }
+    if (O > 0.05) {
+      const gg = g.golgi;
+      if (nr > 1.1) {
+        const ax = x - gg.acx, ay = y - gg.acy, dg = Math.hypot(ax, ay) || 1e-6, rx = ax / dg, ry = ay / dg;
+        const facing = -(rx * gg.dx + ry * gg.dy);
+        if (facing > 0.9) {
+          const gthr = 0.45 * (cwk * Math.abs(rx) + chk * Math.abs(ry));
+          for (let k = 0; k < 4; k++) {
+            if (Math.abs(dg - (gg.Rg - k * gg.sp)) < gthr && facing > Math.cos(0.42 - k * 0.05)) {
+              let gl = orient(-ry, rx, false);
+              if (gl === GI["|"]) gl = gg.dx > 0 ? GI["("] : GI[")"];
+              tg(6, cl.base + 4); set(i, gl, GOL, (0.82 - k * 0.06) * O); P[i] = 1; return;
+            }
+          }
+        }
+      }
+      if (nr < 1.75 && rr < Rm * 0.93) {
+        const q = nr * 6 + 1.1 * fbm(x * 0.007 + 5 + g.seed, y * 0.007 + t * 0.015);
+        if (q - Math.floor(q) < 0.17) {
+          tg(4, cl.base + 5); set(i, hash3(c, r, 7) < 0.16 ? GI[":"] : GI["~"], ER, 0.66 * (1 - 0.55 * (nr - 1) / 0.75) * O); return;
+        }
+      }
+      const mdx = x - g.csx, mdy = y - g.csy, dc = Math.hypot(mdx, mdy), step = Math.PI * 2 / g.K;
+      if (dc > 10 * s && rr < Rm * 0.96) {
+        const kf = (Math.atan2(mdy, mdx) - 0.22 * Math.sin(dc * 0.006)) / step;
+        if (Math.abs(kf - Math.round(kf)) * step * dc < cwk * 0.42) { tg(13, cl.base + 7); set(i, GI["·"], MT, 0.4 * O); return; }
+      }
+      const f = g.fib;
+      if (md < -26 * s && nr > 1.2) {
+        const q = -x * f.s + y * f.c + f.off, li = Math.round(q / f.sp), dd = q - li * f.sp;
+        const thr = 0.5 * (cwk * Math.abs(f.s) + chk * Math.abs(f.c));
+        if (Math.abs(dd) < thr * 0.5 && vnoise((x * f.c + y * f.s) * 0.012, li * 3.7 + g.seed) > 0.55) {
+          tg(15, cl.base + 8); set(i, orient(f.c, f.s, false), ACT, 0.34 * O); return;
+        }
+      }
+    }
+    if ((nr > 1.7 || !cl.nucOn) && nr < 2.9 && rr < Rm * 0.9) {
+      const v = vnoise(x * 0.014 + g.seed, y * 0.014 + t * 0.01);
+      if (Math.abs(v - 0.5) < 0.06) { tg(5, cl.base + 6); set(i, GI["·"], ER, 0.36 * F); return; }
+    }
+    if (fbm(x * 0.03 + t * 0.03 + g.seed, y * 0.03 - t * 0.02) > 0.6) { tg(16, 0); set(i, GI["."], CYT, 0.36 * F); }
+  }
+
+  function pixelDumbbell(cl, i, c, r, x, y, t) {
+    const p = cl.p, D = dumbbell(cl, p), ext = D.sep + D.rr + 4;
+    if (Math.abs(x - cl.X) > ext || Math.abs(y - cl.Y) > ext) return false;
+    const dx1 = x - D.h1x, dy1 = y - D.h1y, dx2 = x - D.h2x, dy2 = y - D.h2y;
+    const l1 = Math.hypot(dx1, dy1), l2 = Math.hypot(dx2, dy2), one = l1 < l2;
+    const l = one ? l1 : l2, dx = one ? dx1 : dx2, dy = one ? dy1 : dy2;
+    const nx = dx / (l || 1), ny = dy / (l || 1), sd = l - D.rr;
+    const thr = 0.37 * (cw * Math.abs(nx) + ch * Math.abs(ny));
+    if (sd > thr) return false;
+    if (sd > -thr) { tg(1, cl.base + 1); set(i, orient(-ny, nx, true), MEM, 0.88); P[i] = 1; return true; }
+    const rn = D.rr * 0.42 * smooth(0.68, 0.82, p);
+    if (rn > 3) {
+      const nd = l - rn, nthr = 0.5 * (cw * Math.abs(nx) + ch * Math.abs(ny));
+      if (Math.abs(nd) < nthr) { tg(2, cl.base + 2); set(i, orient(-ny, nx, false), NUC, 0.9); P[i] = 1; return true; }
+      if (nd < 0) {
+        G[i] = 1; R[i] = 1; C[i] = NUC; P[i] = 1; T[i] = 2; I[i] = cl.base + 2;
+        B[i] = 0.12 + Math.max(0, fbm(x * 0.03 + 7, y * 0.03 - t * 0.02) - 0.42) * 2.2 + 0.25 * (1 - smooth(0.8, 1, p)) * 0.8;
+        return true;
+      }
+    }
+    if (D.q > 0.6 && p < 0.97 && Math.abs(x - cl.X) < cw * 0.6 && Math.abs(y - cl.Y) < ch * 0.6) { tg(21, cl.base + 12); set(i, GI["#"], MEM, 0.9); return true; }
+    const v = vnoise(x * 0.014 + cl.geo.seed, y * 0.014 + t * 0.01);
+    if (Math.abs(v - 0.5) < 0.06) { tg(5, cl.base + 6); set(i, GI["·"], ER, 0.36); return true; }
+    if (fbm(x * 0.03 + t * 0.03, y * 0.03 - t * 0.02) > 0.64) { tg(16, 0); set(i, GI["."], CYT, 0.3); }
+    return true;
+  }
+
+  function extracellular(i, c, r, x, y, t) {
+    const k = 0.0035, e = 3;
+    if (vnoise(x * 0.006 + 9, y * 0.006 - 4) > 0.55) {
+      const fx = (xx, yy) => fbm(xx * k + 30, yy * k - 12 + t * 0.004) * 6;
+      const f = fx(x, y), fr = f - Math.floor(f);
+      const gx = (fx(x + e, y) - fx(x - e, y)) / (2 * e), gy = (fx(x, y + e) - fx(x, y - e)) / (2 * e);
+      const gl = Math.hypot(gx, gy) || 1e-6, nx = gx / gl, ny = gy / gl;
+      const dist = Math.min(fr, 1 - fr) / gl, thr = 0.5 * (cw * Math.abs(nx) + ch * Math.abs(ny));
+      if (dist < thr * 0.5) { tg(18, 0); set(i, orient(-ny, nx, false), ECM, 0.3); return; }
+    }
+    if (fbm(x * 0.025 + t * 0.04, y * 0.025) > 0.72) { tg(0, 0); set(i, GI["."], ECM, 0.2); }
+  }
+
+  // ----- objects stamped on top -----
+  function stampCell(cl, t) {
+    const g = cl.geo, k = cl.k, s = state.size / 14, p = cl.p, F = cl.fresh;
+    const S = (x, y) => [cl.X + k * (x - g.cx), cl.Y + k * (y - g.cy)];
+    const dv = cl.state === "div" ? cl.div : null;
+    const D = dv && p >= 0.6 ? dumbbell(cl, p) : null;
+    const place = (xr, yr) => {
+      let lx = (xr - g.cx) * g.cos + (yr - g.cy) * g.sin, ly = -(xr - g.cx) * g.sin + (yr - g.cy) * g.cos;
+      if (cl.round > 0) { lx *= 1 + (g.rho / g.a - 1) * cl.round * 0.95; ly *= 1 + (g.rho / g.b - 1) * cl.round * 0.95; }
+      let [X, Y] = S(g.cx + lx * g.cos - ly * g.sin, g.cy + lx * g.sin + ly * g.cos);
+      if (D) {
+        const side = (X - cl.X) * dv.ax + (Y - cl.Y) * dv.ay >= 0 ? 1 : -1;
+        X = cl.X + (X - cl.X) * 0.72 + dv.ax * D.sep * side; Y = cl.Y + (Y - cl.Y) * 0.72 + dv.ay * D.sep * side;
+      }
+      return [X, Y];
+    };
+
+    if (cl.state === "apop" && p >= 0.62) {
+      const sp = smooth(0.62, 1, p), fd = 1 - smooth(0.82, 1, p);
+      let bi = 0;
+      for (const bl of cl.blebs) {
+        tg(22, cl.base + 96 + bi++);
+        const Rb = 0.92 + 0.5 * sp;
+        let lx = Math.cos(bl.th) * g.a * Rb, ly = Math.sin(bl.th) * g.b * Rb;
+        const [X, Y] = S(g.cx + lx * g.cos - ly * g.sin + Math.sin(t + bl.ph) * 4, g.cy + lx * g.sin + ly * g.cos);
+        const rad = bl.rB * g.m * k * (1 - 0.25 * sp);
+        if (rad < ch * 0.8) stampTrio(X, Y, bl.dna ? "%" : "o", MEM, 0.85 * fd, bl.dna ? NUC : CYT);
+        else stampDisk(X, Y, rad, MEM, bl.dna ? GI["%"] : GI["."], (bl.dna ? 0.85 : 0.35) * fd, 0.85 * fd, bl.dna ? NUC : CYT);
+      }
+      const [NX, NY] = S(g.nuc.x, g.nuc.y);
+      let fi = 0;
+      for (const f of cl.frags.slice(0, 2)) {
+        tg(23, cl.base + 150 + fi++);
+        const d = g.nuc.na * k * 0.45 * (1 + sp);
+        const X = NX + Math.cos(f.ang) * d, Y = NY + Math.sin(f.ang) * d, rad = g.m * k * 0.14;
+        if (rad < ch * 0.8) stampTrio(X, Y, "@", MEM, 0.9 * fd, NUC);
+        else stampDisk(X, Y, rad, MEM, GI["@"], 0.9 * fd, 0.85 * fd, NUC);
+      }
+      return;
+    }
+
+    // filopodia, retracting as the cell rounds up or dies
+    if (cl.retract > 0.05 && !D) for (const f of g.filo) {
+      const th = f.th, Rm = cellRm(g, th, t) + lamBump(cl, th, t);
+      const lx = Math.cos(th) * Rm * g.a, ly = Math.sin(th) * Rm * g.b;
+      let nx = Math.cos(th) / g.a, ny = Math.sin(th) / g.b; const nl = Math.hypot(nx, ny); nx /= nl; ny /= nl;
+      const [px, py] = S(g.cx + lx * g.cos - ly * g.sin, g.cy + lx * g.sin + ly * g.cos);
+      const wnx = nx * g.cos - ny * g.sin, wny = nx * g.sin + ny * g.cos;
+      const len = f.len * cl.retract * (0.75 + 0.25 * Math.sin(t * 0.5 + f.ph)), st = 0.6 * Math.max(cw, ch);
+      tg(17, cl.base + 9);
+      if (len > 3) stampLine(px + wnx * st, py + wny * st, px + wnx * (st + len), py + wny * (st + len), MEM, 0.55, null);
+    }
+
+    if (g.villi && cl.retract > 0.05 && !D) {
+      const V = g.villi; tg(29, cl.base + 14);
+      for (let j = 0; j < V.n; j++) {
+        const th = V.th - V.hw + (j + 0.5) * 2 * V.hw / V.n, Rm = cellRm(g, th, t) + lamBump(cl, th, t);
+        const lx = Math.cos(th) * Rm * g.a, ly = Math.sin(th) * Rm * g.b;
+        let nx = Math.cos(th) / g.a, ny = Math.sin(th) / g.b; const nl = Math.hypot(nx, ny); nx /= nl; ny /= nl;
+        const [px, py] = S(g.cx + lx * g.cos - ly * g.sin, g.cy + lx * g.sin + ly * g.cos);
+        const wnx = nx * g.cos - ny * g.sin, wny = nx * g.sin + ny * g.cos, st = 0.6 * Math.max(cw, ch);
+        const len = Math.max(cw, ch) * (1.2 + 0.5 * hash3(j, 3, 5)) * cl.retract;
+        stampLine(px + wnx * st, py + wny * st, px + wnx * (st + len), py + wny * (st + len), MEM, 0.62, null);
+      }
+    }
+
+    if (g.procs && g.procs.length && cl.retract > 0.05 && !D) {
+      const rf = cl.retract, astro = g.ptype === "astro", col = astro ? ASTRO : MEM;
+      const P2 = (x, y) => S(g.cx + (x - g.cx) * rf, g.cy + (y - g.cy) * rf);
+      const lv = astro ? [0.72, 0.58, 0.48] : [0.82, 0.66, 0.52];
+      tg(astro ? 50 : 51, cl.base + 13);
+      for (const b of g.procs) {
+        const bb = lv[b.depth] * F;
+        let prev = P2(b.pts[0][0], b.pts[0][1]);
+        for (let j = 1; j < b.pts.length; j++) {
+          const q = P2(b.pts[j][0], b.pts[j][1]);
+          stampLineOut(prev[0], prev[1], q[0], q[1], col, bb, null);
+          if (!astro && b.depth >= 1 && j % 3 === 1) {
+            const sx = q[0] - prev[0], sy = q[1] - prev[1], sl = Math.hypot(sx, sy) || 1, side = (j / 3 | 0) % 2 ? 1 : -1;
+            stampCharOut(q[0] - sy / sl * side * cw * 1.2, q[1] + sx / sl * side * ch * 0.9, hash3(j, b.depth, cl.base) < 0.55 ? GI["o"] : GI["·"], MEM, 0.55 * F);
+          }
+          prev = q;
+        }
+        if (astro && b.depth === 2) stampCharOut(prev[0], prev[1], GI["o"], ASTRO, 0.85 * F);
+      }
+    }
+
+    const ofade = cl.state === "apop" ? 1 - smooth(0.25, 0.55, p) : 1;
+    const osc = k * (D ? 0.8 : 1);
+    let oi = 0;
+    for (const o of g.mitos) {
+      const id = cl.base + 16 + oi++; tg(7, id);
+      const [X, Y] = nudge(o, id, ...place(o.x + Math.sin(t * 0.12 + o.ph) * 18 * g.ms, o.y + Math.cos(t * 0.1 + o.ph * 1.3) * 13 * g.ms));
+      stampMito(o, X, Y, osc, t, ofade * F);
+    }
+    oi = 0;
+    for (const d of g.disks) {
+      const id = cl.base + 48 + oi++; tg(DISK_T[d.kind], id);
+      const [X, Y] = nudge(d, id, ...place(d.x + Math.sin(t * 0.2 + d.ph) * 6 * s, d.y + Math.cos(t * 0.17 + d.ph) * 5 * s));
+      stampOrg(d, X, Y, osc, ofade * F);
+    }
+
+    if (cl.state === "apop") {
+      if (p >= 0.38) {
+        const [NX, NY] = S(g.nuc.x, g.nuc.y), spread = smooth(0.38, 0.58, p);
+        let fi = 0;
+        for (const f of cl.frags) {
+          tg(23, cl.base + 150 + fi++);
+          const d = f.d * g.nuc.na * k * cl.ns * (0.25 + 0.7 * spread);
+          stampTrio(NX + Math.cos(f.ang) * d, NY + Math.sin(f.ang) * d, "@", NUC, 0.95);
+        }
+      }
+      return;
+    }
+
+    if (dv) { stampMitosis(cl, t, place, D); return; }
+
+    // live: golgi buds, vesicle traffic, centrosome
+    tg(24, cl.base + 4);
+    for (let b = 0; b < g.golgi.buds.length; b++) {
+      const bd = g.golgi.buds[b];
+      if (hash3(b, Math.floor(g.seed), Math.floor(t * 0.7 + b * 0.37)) > 0.45) { const [X, Y] = S(bd.x, bd.y); stampChar(X, Y, GI["o"], GOL, 0.8 * F); }
+    }
+    const step = Math.PI * 2 / g.K, span = Math.max(g.a, g.b) * 1.1, n = g.nuc;
+    let vi = 0;
+    for (const v of g.ves) {
+      const vid = cl.base + 96 + vi++;
+      let f = (v.h + t * v.spd * v.dir) % 1; if (f < 0) f += 1;
+      const dc = 16 * s + f * span, ang = v.k * step + 0.22 * Math.sin(dc * 0.006);
+      const px = g.csx + Math.cos(ang) * dc, py = g.csy + Math.sin(ang) * dc;
+      const dx = px - g.cx, dy = py - g.cy, lx = dx * g.cos + dy * g.sin, ly = -dx * g.sin + dy * g.cos;
+      if ((lx / g.a) ** 2 + (ly / g.b) ** 2 > 0.93 ** 2) continue;
+      const ndx = px - n.x, ndy = py - n.y, nlx = ndx * g.cos + ndy * g.sin, nly = -ndx * g.sin + ndy * g.cos;
+      if ((nlx / n.na) ** 2 + (nly / n.nb) ** 2 < 1.1 ** 2) continue;
+      tg(12, vid);
+      const [X, Y] = nudge(v, vid, ...S(px, py));
+      if (v.big) stampTrio(X, Y, "O", VES, 0.96 * F); else stampChar(X, Y, GI["o"], VES, 0.96 * F);
+    }
+    const [CX, CY] = S(g.csx, g.csy);
+    // primary cilium with its rootlet back to the centrosome
+    if (g.cil) {
+      const cth = g.cil.th, Rm0 = cellRm(g, cth, t) + lamBump(cl, cth, t);
+      const lx = Math.cos(cth) * Rm0 * g.a, ly = Math.sin(cth) * Rm0 * g.b;
+      let nx = Math.cos(cth) / g.a, ny = Math.sin(cth) / g.b; const nl = Math.hypot(nx, ny); nx /= nl; ny /= nl;
+      const [bx, by] = S(g.cx + lx * g.cos - ly * g.sin, g.cy + lx * g.sin + ly * g.cos);
+      const wnx = nx * g.cos - ny * g.sin, wny = nx * g.sin + ny * g.cos, qx = -wny, qy = wnx;
+      tg(27, cl.base + 15);
+      stampLine(CX, CY, bx - wnx * cw, by - wny * cw, MT, 0.3 * F, GI["·"]);
+      const L = g.cil.len * k * F, st = 0.6 * Math.max(cw, ch);
+      let prev = [bx + wnx * st, by + wny * st];
+      for (let j = 1; j <= 8; j++) {
+        const sl = j / 8, bend = L * (0.28 * Math.sin(t * 0.7 + g.cil.ph) + 0.1) * sl * sl;
+        const q = [bx + wnx * (st + L * sl) + qx * bend, by + wny * (st + L * sl) + qy * bend];
+        stampLine(prev[0], prev[1], q[0], q[1], MT, 0.8 * F, null); prev = q;
+      }
+    }
+    // mRNA traffic
+    let mk = 0;
+    for (const m of g.mrna) {
+      tg(26, cl.base + 200 + mk++);
+      const q = (((t + m.off) / m.T) % 1 + 1) % 1;
+      const bb = 0.95 * F * smooth(0, 0.05, q) * (1 - smooth(0.93, 1, q));
+      if (bb < 0.07) continue;
+      const [hx, hy] = S(...mrnaPos(m, q, t, s));
+      // direction of travel: toward the pore inside the nucleus, along the track after export
+      let ex = m.dir[0], ey = m.dir[1];
+      if (q < 0.3) { const ddx = m.o.x - m.s.x, ddy = m.o.y - m.s.y, dl = Math.hypot(ddx, ddy) || 1; ex = ddx / dl; ey = ddy / dl; }
+      const sx = ex * cw, sy = ey * ch * 0.7;
+      if (q > 0.08 && q < 0.7) stampForce(hx - sx * 3, hy - sy * 3, GI["·"], MRNA, 0.4 * bb);
+      if (q >= 0.7) {
+        const nR = Math.floor(smooth(0.7, 0.86, q) * 4.99);
+        for (let j = 1; j <= nR; j++) {
+          const sd = j % 2 ? 1 : -1, dd = (Math.ceil(j / 2) + 1) * 1.05;
+          stampForce(hx + sx * dd * sd, hy + sy * dd * sd, GI["o"], ER, 0.9 * bb);
+        }
+        stampForce(hx - sx, hy - sy, GI["~"], MRNA, bb); stampForce(hx + sx, hy + sy, GI["~"], MRNA, bb);
+      } else { stampForce(hx - sx, hy - sy, GI["~"], MRNA, bb); stampForce(hx - sx * 2, hy - sy * 2, GI["~"], MRNA, 0.75 * bb); }
+      stampForce(hx, hy, GI["~"], MRNA, bb);
+    }
+    tg(14, cl.base + 10);
+    const ci = stampChar(CX, CY, GI["*"], MT, F);
+    if (ci >= 0 && ci % cols < cols - 1 && !P[ci + 1]) set(ci + 1, GI["+"], MT, 0.9 * F);
+  }
+
+  function stampMitosis(cl, t, place, D) {
+    const g = cl.geo, k = cl.k, s = state.size / 14, p = cl.p, dv = cl.div;
+    const ax = dv.ax, ay = dv.ay, px = -ay, py = ax, rhoS = g.rho * k, CX = cl.X, CY = cl.Y;
+    const [P0x, P0y] = place(g.csx, g.csy);
+    const [NX, NY] = place(g.nuc.x, g.nuc.y);
+    const sp = smooth(0.04, 0.22, p);
+    const pd = D ? D.sep + D.rr * 0.55 : rhoS * 0.55;
+    const poles = [-1, 1].map(sg => [P0x + (CX + ax * pd * sg - P0x) * sp, P0y + (CY + ay * pd * sg - P0y) * sp]);
+    const fibF = smooth(0.16, 0.24, p) * (1 - smooth(0.62, 0.72, p));
+    const sepMax = D ? D.sep + D.rr * 0.48 * (1 - smooth(0.62, 0.74, p)) : smooth(0.45, 0.6, p) * rhoS * 0.48;
+    const squeeze = 1 - 0.7 * smooth(0.55, 0.72, p);
+    const chrF = 1 - smooth(0.7, 0.8, p);
+    tg(20, cl.base + 11);
+
+    // astral rays
+    const astF = smooth(0.1, 0.2, p) * (1 - smooth(0.66, 0.78, p));
+    if (astF > 0.05) poles.forEach((q, pi) => {
+      const sg = pi ? 1 : -1, base = Math.atan2(ay * sg, ax * sg);
+      for (let j = -3; j <= 3; j++) {
+        const a = base + j * 0.38, L = rhoS * (0.3 + 0.06 * Math.sin(j * 2.1 + t * 0.4));
+        stampLine(q[0] + Math.cos(a) * cw, q[1] + Math.sin(a) * cw, q[0] + Math.cos(a) * L, q[1] + Math.sin(a) * L, MT, 0.32 * astF, GI["·"]);
+      }
+    });
+    // chromosome positions
+    const conv = smooth(0.14, 0.3, p);
+    const pos = dv.chroms.map(ch0 => {
+      const plx = CX + px * ch0.v * rhoS * squeeze + ax * Math.sin(t * 1.3 + ch0.ph) * 4 * s * (1 - smooth(0.45, 0.5, p));
+      const ply = CY + py * ch0.v * rhoS * squeeze + ay * Math.sin(t * 1.3 + ch0.ph) * 4 * s * (1 - smooth(0.45, 0.5, p));
+      const scx = NX + ch0.sx * g.nuc.na * k * 0.6, scy = NY + ch0.sy * g.nuc.nb * k * 0.6;
+      return [scx + (plx - scx) * conv, scy + (ply - scy) * conv];
+    });
+    // kinetochore fibres and, in anaphase, interpolar fibres
+    if (fibF > 0.05) {
+      for (const [x, y] of pos) {
+        stampLine(poles[0][0], poles[0][1], x - ax * (sepMax + cw), y - ay * (sepMax + cw), MT, 0.42 * fibF, GI["·"]);
+        stampLine(poles[1][0], poles[1][1], x + ax * (sepMax + cw), y + ay * (sepMax + cw), MT, 0.42 * fibF, GI["·"]);
+      }
+    }
+    const ipF = smooth(0.46, 0.55, p) * (1 - smooth(0.72, 0.82, p));
+    if (ipF > 0.05 && sepMax > 4) for (const o of [-0.12, 0, 0.12]) {
+      const ox = px * o * rhoS, oy = py * o * rhoS, L = Math.max(sepMax - cw * 1.5, 0);
+      stampLine(CX + ox - ax * L, CY + oy - ay * L, CX + ox + ax * L, CY + oy + ay * L, MT, 0.5 * ipF, null);
+    }
+    // chromosomes: condensed X shapes, then separating chromatids
+    if (p > 0.1 && chrF > 0.05) {
+      const cb = smooth(0.1, 0.16, p) * chrF;
+      let ki = 0;
+      for (const [x, y] of pos) {
+        tg(sepMax < 3 ? 19 : 25, cl.base + 160 + ki++);
+        if (sepMax < 3) {
+          const c0 = Math.round(x / cw) - 1, r0 = Math.round(y / ch) - 1, xg = [["\\", "/"], ["/", "\\"]];
+          for (let dr = 0; dr < 2; dr++) for (let dc = 0; dc < 2; dc++) {
+            const cc = c0 + dc, rr = r0 + dr;
+            if (cc >= 0 && rr >= 0 && cc < cols && rr < rows) { const i = rr * cols + cc; set(i, GI[xg[dr][dc]], NUC, 0.98 * cb); P[i] = 1; }
+          }
+        } else {
+          stampChar(x - ax * sepMax, y - ay * sepMax, arrow(-ax, -ay), NUC, 0.98 * cb);
+          stampChar(x + ax * sepMax, y + ay * sepMax, arrow(ax, ay), NUC, 0.98 * cb);
+        }
+      }
+    }
+    const poleF = smooth(0.03, 0.08, p) * (1 - smooth(0.74, 0.84, p));
+    tg(14, cl.base + 10);
+    if (poleF > 0.05) for (const q of poles) { const i = stampChar(q[0], q[1], GI["*"], MT, poleF); if (i >= 0) P[i] = 1; }
+  }
+
+  const DISK_T = { lys: 8, end: 9, lip: 10, per: 11 };
+  const hoverLive = () => pointer.on && !reduce.matches;
+  function nudge(o, id, X, Y) { return [X, Y]; }
+
+  function lamBump(cl, th, t) {
+    const L = cl.geo.lam; if (!L) return 0;
+    const da = Math.atan2(Math.sin(th - L.th), Math.cos(th - L.th)), w = Math.exp(-((da / L.hw) ** 2));
+    return w * cl.retract * (L.A + 0.014 * Math.sin(da * 28 + t * 1.5));
+  }
+  function stampForce(x, y, g, col, b) {
+    const c = Math.floor(x / cw), r = Math.floor(y / ch);
+    if (c < 0 || r < 0 || c >= cols || r >= rows) return;
+    const i = r * cols + c; if (T[i] === 1) return;
+    set(i, g, col, b);
+  }
+  function mrnaPos(m, q, t, s) {
+    if (q < 0.08) return [m.s.x + Math.sin(t * 5 + m.ph) * 3 * s, m.s.y + Math.cos(t * 4 + m.ph) * 3 * s];
+    if (q < 0.25) {
+      const u = smooth(0.08, 0.25, q), w = Math.sin(t * 6 + m.ph) * 4 * s * Math.sin(u * Math.PI);
+      return [m.s.x + (m.p.x - m.s.x) * u + m.perp[0] * w, m.s.y + (m.p.y - m.s.y) * u + m.perp[1] * w];
+    }
+    if (q < 0.3) { const u = smooth(0.25, 0.3, q); return [m.p.x + (m.o.x - m.p.x) * u, m.p.y + (m.o.y - m.p.y) * u]; }
+    let u = 1;
+    if (q < 0.7) { const z = (q - 0.3) / 0.4 * m.steps, k = Math.floor(z); u = (k + smooth(0.35, 1, z - k)) / m.steps; }
+    const b = m.bow * Math.sin(u * Math.PI);
+    return [m.o.x + (m.d.x - m.o.x) * u + m.perp[0] * b, m.o.y + (m.d.y - m.o.y) * u + m.perp[1] * b];
+  }
+  function edgePoint(cl, tx, ty, t) {
+    const g = cl.geo, dx = tx - cl.X, dy = ty - cl.Y;
+    const lx = dx * g.cos + dy * g.sin, ly = -dx * g.sin + dy * g.cos;
+    const th = Math.atan2(ly / g.b, lx / g.a), Rm = cellRm(g, th, t) + lamBump(cl, th, t);
+    const px = Math.cos(th) * Rm * g.a, py = Math.sin(th) * Rm * g.b;
+    return [cl.X + cl.k * (px * g.cos - py * g.sin), cl.Y + cl.k * (px * g.sin + py * g.cos)];
+  }
+  function stampLineOut(x0, y0, x1, y1, col, b, gl) {
+    const dx = x1 - x0, dy = y1 - y0, len = Math.hypot(dx, dy); if (len < 1 || b < 0.05) return;
+    const g = gl != null ? gl : orient(dx, dy, false);
+    const n = Math.ceil(len / (Math.min(cw, ch) * 0.5));
+    let last = -1;
+    for (let k = 0; k <= n; k++) {
+      const c = Math.floor((x0 + dx * k / n) / cw), r = Math.floor((y0 + dy * k / n) / ch);
+      if (c < 0 || r < 0 || c >= cols || r >= rows) continue;
+      const i = r * cols + c; if (i === last || P[i] || M[i]) continue; last = i;
+      set(i, g, col, b);
+    }
+  }
+  function stampCharOut(x, y, g, col, b) {
+    const c = Math.floor(x / cw), r = Math.floor(y / ch);
+    if (c < 0 || r < 0 || c >= cols || r >= rows) return;
+    const i = r * cols + c; if (P[i] || M[i]) return;
+    set(i, g, col, b);
+  }
+  function drawAxons(t) {
+    const s = state.size / 14;
+    world.cells.forEach(src => {
+      const sl = src.slot, tsl = sl.axTarget;
+      if (!tsl || src.state !== "live" || src.geo.ptype !== "neuro") return;
+      const dst = world.cells.find(c => c.slot === tsl && c.state === "live"); if (!dst) return;
+      const fade = Math.min(src.fresh, dst.fresh); if (fade < 0.5) return;
+      const pa = edgePoint(src, dst.X, dst.Y, t), pb = edgePoint(dst, src.X, src.Y, t);
+      const L0 = Math.hypot(pb[0] - pa[0], pb[1] - pa[1]); if (L0 < 3 * cw) return;
+      const ux = (pb[0] - pa[0]) / L0, uy = (pb[1] - pa[1]) / L0, nx = -uy, ny = ux;
+      const end = [pb[0] - ux * cw * 2.6, pb[1] - uy * cw * 2.6], dx = end[0] - pa[0], dy = end[1] - pa[1];
+      const bow = L0 * 0.18 * sl.axBow;
+      const pt = u => [pa[0] + dx * u + nx * bow * 4 * u * (1 - u), pa[1] + dy * u + ny * bow * 4 * u * (1 - u)];
+      const q = (((t + sl.axOff) / sl.axPer) % 1 + 1) % 1, head = q / 0.35, id = 100000 + world.slots.indexOf(sl);
+      tg(52, id);
+      const N = Math.max(4, Math.ceil(L0 / 10));
+      let prev = pt(0);
+      for (let j = 1; j <= N; j++) {
+        const u = j / N, cur = pt(u), dd = head - u, hot = q < 0.35 && dd >= 0 && dd < 0.15;
+        stampLineOut(prev[0], prev[1], cur[0], cur[1], hot ? VES : MT, (hot ? 1 : 0.62) * fade, null);
+        prev = cur;
+      }
+      tg(53, id);
+      stampCharOut(end[0], end[1], GI["O"], q >= 0.33 && q < 0.5 ? VES : GOL, fade);
+      if (q >= 0.35 && q < 0.6) {
+        for (let k = 0; k < 3; k++) {
+          const u = clamp((q - 0.35) / 0.2 - k * 0.25, 0, 1);
+          stampCharOut(end[0] + (pb[0] - end[0]) * u + nx * (k - 1) * 5 * s, end[1] + (pb[1] - end[1]) * u + ny * (k - 1) * 5 * s, GI["·"], MRNA, 0.95 * fade);
+        }
+      }
+    });
+  }
+  function drawTNTs(t) {
+    world.tnts.forEach((tn, ti) => {
+      const ca = world.cells.find(c => c.slot === tn.a), cb = world.cells.find(c => c.slot === tn.b);
+      if (!ca || !cb || ca.state !== "live" || cb.state !== "live") return;
+      const fade = Math.min(ca.fresh, cb.fresh); if (fade < 0.6) return;
+      const pa = edgePoint(ca, cb.X, cb.Y, t), pb = edgePoint(cb, ca.X, ca.Y, t);
+      const dx = pb[0] - pa[0], dy = pb[1] - pa[1], L = Math.hypot(dx, dy); if (L < 8) return;
+      const nx = -dy / L, ny = dx / L, bow = L * (tn.sag + 0.05 * Math.sin(t * 0.4 + tn.ph));
+      const pt = u => [pa[0] + dx * u + nx * bow * 4 * u * (1 - u), pa[1] + dy * u + ny * bow * 4 * u * (1 - u)];
+      tg(30, 100000 + ti);
+      const N = Math.max(4, Math.ceil(L / 14));
+      let prev = pt(0);
+      for (let j = 1; j <= N; j++) { const q = pt(j / N); stampLine(prev[0], prev[1], q[0], q[1], MEM, 0.5 * fade, null); prev = q; }
+      let u = (t * 0.07 * tn.dir + tn.ph) % 1; if (u < 0) u += 1;
+      const q = pt(0.06 + u * 0.88);
+      stampChar(q[0], q[1], GI["o"], VES, 0.95 * fade);
+    });
+  }
+
+  function sceneCells(t) {
+    updateWorld(t);
+    const cells = world.cells;
+    cells.forEach((cl, ci) => {
+      cl.base = (ci + 1) * 256;
+    });
+    for (let r = 0; r < rows; r++) {
+      const y = (r + 0.5) * ch;
+      for (let c = 0; c < cols; c++) {
+        const x = (c + 0.5) * cw, i = r * cols + c;
+        let hit = false;
+        for (const cl of cells) {
+          if (cl.state === "apop" && cl.p >= 0.62) continue;
+          if (cl.state === "div" && cl.p >= 0.6 ? pixelDumbbell(cl, i, c, r, x, y, t) : pixelEllipse(cl, i, c, r, x, y, t)) { hit = true; break; }
+        }
+        M[i] = hit ? 1 : 0;
+        if (!hit) extracellular(i, c, r, x, y, t);
+      }
+    }
+    drawAxons(t);
+    for (const cl of cells) stampCell(cl, t);
+  }
+
+  function growBranch(rand, list, x, y, ang, len, depth, maxDepth, parent, pIdx, s) {
+    const pts = [[x, y]], step = 8 * s;
+    let a = ang;
+    const n = Math.max(2, Math.round(len / step));
+    for (let k = 0; k < n; k++) {
+      a += (rand() - 0.5) * 0.35;
+      x += Math.cos(a) * step; y += Math.sin(a) * step;
+      pts.push([x, y]);
+    }
+    const idx = list.length;
+    list.push({ pts, depth, parent, pIdx });
+    if (depth < maxDepth) {
+      const kids = rand() < 0.8 ? 2 : 1;
+      for (let j = 0; j < kids; j++) {
+        const sg = kids === 1 ? (rand() < 0.5 ? 1 : -1) : (j ? -1 : 1);
+        growBranch(rand, list, x, y, a + sg * (0.35 + rand() * 0.35), len * (0.6 + rand() * 0.2), depth + 1, maxDepth, idx, pts.length - 1, s);
+      }
+    }
+  }
+
+  const SCENES = { cells: sceneCells };
+
+  // ---------- draw ----------
+  function render(t) {
+    G.fill(0); P.fill(0); T.fill(0);
+    SCENES[state.scene](t);
+    const isCell = state.scene === "cell" || state.scene === "cells" || state.scene === "neurons";
+    pickHover(isCell);
+    const hov = hover && hover.inst ? hover.inst : 0;
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const clr = state.text ? 0.8 : 0, cb = clearBox, fall = 90;
+    const pr = 115, pon = pointer.on && !reduce.matches;
+    const pulses = isCell ? world.pulses.map(pu => ({ x: pu.x, y: pu.y, R: (t - pu.t) * 420, f: 1 - (t - pu.t) / 0.9 })) : [];
+    for (let r = 0; r < rows; r++) {
+      const y = (r + 0.5) * ch;
+      for (let c = 0; c < cols; c++) {
+        const i = r * cols + c, g0 = G[i];
+        if (!g0) continue;
+        const x = (c + 0.5) * cw;
+        let b = B[i];
+        if (clr) {
+          const dx = Math.max(Math.abs(x - cb.x) - cb.hw, 0), dy = Math.max(Math.abs(y - cb.y) - cb.hh, 0);
+          const d = Math.hypot(dx, dy);
+          if (d < fall) b *= 1 - clr * (1 - smooth(0, 1, d / fall));
+        }
+        if (pon) {
+          const pdx = x - pointer.x, pdy = y - pointer.y, d2 = pdx * pdx + pdy * pdy;
+          if (d2 < pr * pr) {
+            const f = 1 - Math.sqrt(d2) / pr;
+            if (!isCell) b += 0.42 * f * f;
+            else if (hov && I[i] !== hov) b *= 1 - 0.35 * f;
+          }
+        }
+        if (hov && I[i] === hov) b = R[i] ? b + 0.3 : Math.max(b, 0.8) + 0.2;
+        for (const pu of pulses) {
+          const d = Math.hypot(x - pu.x, y - pu.y) - pu.R;
+          if (d > -60 && d < 60) b += 0.6 * pu.f * Math.exp(-((d / 22) ** 2));
+        }
+        let gg = g0;
+        if (R[i]) { const k = Math.round(clamp(b, 0, 1) * 9); if (!k) continue; gg = RAMP[k]; }
+        else if (b < 0.07) continue;
+        const k = b < 0.3 ? 0 : b < 0.55 ? 1 : b < 0.8 ? 2 : 3;
+        ctx.drawImage(atlas, gg * tw, (C[i] * 4 + k) * th, tw, th, c * tw, r * th, tw, th);
+      }
+    }
+  }
+
+  // ---------- hover labels ----------
+  const LABELS = {
+    1: ["Plasma membrane", "The lipid bilayer that wraps the cell"],
+    2: ["Nucleus", "Holds the DNA behind a double membrane with pores"],
+    3: ["Nucleolus", "Where ribosomes are assembled"],
+    4: ["Rough ER", "Membrane sheets studded with ribosomes that make proteins"],
+    5: ["Smooth ER", "A tubular network that makes lipids and stores calcium"],
+    6: ["Golgi apparatus", "Sorts and packages proteins into vesicles"],
+    7: ["Mitochondrion", "Makes ATP on its folded inner membrane"],
+    8: ["Lysosome", "Breaks down worn-out parts with acid enzymes"],
+    9: ["Endosome", "Sorts material the cell has taken in"],
+    10: ["Lipid droplet", "A store of fat for energy and membranes"],
+    11: ["Peroxisome", "Breaks down fatty acids and neutralises peroxide"],
+    12: ["Transport vesicle", "Carries cargo along a microtubule"],
+    13: ["Microtubules", "Tracks that radiate from the centrosome"],
+    14: ["Centrosome", "Organises microtubules and splits to form the spindle"],
+    15: ["Actin fibres", "Contractile cables that keep the cell under tension"],
+    16: ["Cytosol", "Crowded fluid full of free ribosomes"],
+    17: ["Filopodium", "A finger of membrane the cell uses to feel its way"],
+    18: ["Extracellular matrix", "Collagen fibres that hold the tissue together"],
+    19: ["Chromosome", "Two sister chromatids held at the centromere"],
+    20: ["Spindle", "Microtubules that line up and pull apart the chromosomes"],
+    21: ["Midbody", "The last bridge between two daughter cells"],
+    22: ["Apoptotic body", "A membrane-wrapped piece of a dying cell"],
+    23: ["Nuclear fragment", "Condensed DNA from a nucleus breaking apart"],
+    24: ["Golgi vesicle", "Buds off the Golgi carrying finished cargo"],
+    25: ["Chromatid", "Being pulled toward a spindle pole"]
+  };
+  function pickHover(isCell) {
+    hover = null;
+    if (isCell && pointer.on) {
+      const c0 = Math.floor(pointer.x / cw), r0 = Math.floor(pointer.y / ch);
+      let bd = 1e9;
+      for (let dr = -1; dr <= 1; dr++) for (let dc = -2; dc <= 2; dc++) {
+        const c = c0 + dc, r = r0 + dr;
+        if (c < 0 || r < 0 || c >= cols || r >= rows) continue;
+        const i = r * cols + c;
+        if (!G[i] || (T[i] !== 2 && T[i] !== 3) || B[i] < 0.1) continue;
+        const d = Math.hypot(dc * cw, dr * ch);
+        if (d < bd) { bd = d; hover = { type: T[i], inst: I[i] }; }
+      }
+    }
+  }
+
+  // ---------- loop ----------
+  let raf = 0, last = 0, t0 = performance.now();
+  function loop(now) {
+    raf = requestAnimationFrame(loop);
+    if (now - last < 32) return;
+    last = now; time = (now - t0) / 1000;
+    render(time);
+  }
+  function start() {
+    cancelAnimationFrame(raf);
+    if (reduce.matches) { time = 20; render(time); }
+    else raf = requestAnimationFrame(loop);
+  }
+  const redrawIfStill = () => { if (reduce.matches) render(time); };
+
+  // ---------- UI ----------
+  const hero = document.getElementById("hero");
+  function setScene(name) {
+    state.scene = name;
+    document.getElementById("title").textContent = COPY[name][0];
+    document.getElementById("lede").textContent = COPY[name][1];
+    layoutCells();
+    buildAtlas(); measureClearing(); redrawIfStill();
+  }
+  const syncMode = () => document.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.mode === "dark") === theme.dark)));
+  document.querySelectorAll("[data-mode]").forEach(b => b.addEventListener("click", () => {
+    document.documentElement.setAttribute("data-theme", b.dataset.mode);
+  }));
+  document.querySelectorAll("[data-pal]").forEach(b => b.addEventListener("click", () => {
+    state.pal = b.dataset.pal;
+    document.querySelectorAll("[data-pal]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    buildAtlas(); redrawIfStill();
+  }));
+  document.getElementById("size").addEventListener("input", e => { state.size = +e.target.value; resize(); redrawIfStill(); });
+  document.getElementById("showText").addEventListener("change", e => {
+    state.text = e.target.checked; hero.classList.toggle("hidden", !state.text); redrawIfStill();
+  });
+  window.addEventListener("pointerdown", e => {
+    if (e.target.closest && e.target.closest(".dock")) return;
+    if (reduce.matches) return;
+    killAt(e.clientX, e.clientY);
+  });
+  let stillRaf = 0;
+  const stillRender = () => { if (reduce.matches && !stillRaf) stillRaf = requestAnimationFrame(() => { stillRaf = 0; render(time); }); };
+  window.addEventListener("message", e => {
+    const data = e.data;
+    if (!data || data.source !== "portfolio-cells") return;
+    if (data.type === "theme") {
+      document.documentElement.setAttribute("data-theme", data.theme === "dark" ? "dark" : "light");
+      return;
+    }
+    if (data.type === "size") {
+      state.size = clamp(Number(data.value) || 15, 10, 22);
+      resize();
+      redrawIfStill();
+      return;
+    }
+    if (data.type === "cellScale") {
+      state.cellScale = clamp(Number(data.value) || 1.225, 0.75, 1.65);
+      layoutCells();
+      redrawIfStill();
+      return;
+    }
+    if (data.type === "leave") {
+      pointer.on = false;
+      stillRender();
+      return;
+    }
+    pointer.x = data.x;
+    pointer.y = data.y;
+    pointer.on = true;
+    if (data.type === "down" && !reduce.matches) killAt(data.x, data.y);
+    stillRender();
+  });
+  window.addEventListener("pointermove", e => {
+    const overDock = e.target.closest && e.target.closest(".dock");
+    pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = !overDock && e.pointerType !== "touch"; stillRender();
+  }, { passive: true });
+  document.addEventListener("pointerleave", () => { pointer.on = false; stillRender(); });
+  window.addEventListener("blur", () => { pointer.on = false; stillRender(); });
+  let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); redrawIfStill(); }, 120); });
+  const onTheme = () => { readTheme(); syncMode(); buildAtlas(); redrawIfStill(); };
+  darkMQ.addEventListener("change", onTheme);
+  new MutationObserver(onTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  reduce.addEventListener("change", start);
+
+  // ---------- boot ----------
+  resize();
+  setScene("cells");
+  syncMode();
+  start();
+  if (document.fonts && document.fonts.load) {
+    Promise.all([document.fonts.load('16px "IBM Plex Mono"'), document.fonts.load('300 40px "Spectral"')])
+      .then(() => { buildAtlas(); measureClearing(); redrawIfStill(); }).catch(() => {});
+  }
+})();
+</script>
+</body>
+</html>

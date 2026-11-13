@@ -1,0 +1,10 @@
+2026.tex
+.DS_Store
+.latex-out/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+/assets/icon.ai
