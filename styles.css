@@ -73,7 +73,7 @@
   --noise-opacity: 0.035;
   --reading-surface: rgba(8, 13, 22, 0.01);
   --reading-border: rgba(205, 220, 239, 0.13);
-  --reading-blur: 5px;
+  --reading-blur: 6px;
   --glass-highlight: rgba(255, 255, 255, 0.24);
   --glass-highlight-soft: rgba(255, 255, 255, 0.08);
   --glass-edge-shadow: rgba(0, 0, 0, 0.56);
