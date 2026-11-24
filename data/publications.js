@@ -1,5 +1,13 @@
 window.PUBLICATIONS = [
   {
+    "title": "Revealing the transcriptomic organization of extrasomatic interfaces using SCOUBI",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.11.10.765731v1.abstract",
+    "authors": "Bhavay Aggarwal, Saumya Jain, and Saurabh Sinha.",
+    "venue": "bioRxiv",
+    "year": 2026,
+    "oneLiner": "Exploring extrasomatic synaptic environments directly from spatial transcriptomics."
+  },
+  {
     "title": "MANTIS: Analytics toolkit for spatial metabolomics with matching spatial transcriptomics data",
     "url": "https://www.biorxiv.org/content/10.64898/2026.01.20.700581v2.abstract",
     "authors": "Yu Hao, Yeojin Kim, Bhavay Aggarwal, and Saurabh Sinha.",
